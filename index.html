@@ -22,10 +22,7 @@ body {
     color: #263238;
 }
 
-/* =========================================================
-   ENCABEZADO
-========================================================= */
-
+/* ENCABEZADO */
 .header {
     background: white;
     border-top: 6px solid #1769aa;
@@ -68,10 +65,7 @@ body {
     text-align: right;
 }
 
-/* =========================================================
-   MENU
-========================================================= */
-
+/* MENU */
 .menu {
     display: flex;
     width: 100%;
@@ -99,10 +93,7 @@ body {
     color: white;
 }
 
-/* =========================================================
-   PANTALLAS
-========================================================= */
-
+/* PANTALLAS */
 .pantalla {
     display: none;
     width: 100%;
@@ -112,10 +103,7 @@ body {
     display: block;
 }
 
-/* =========================================================
-   CONTENEDOR
-========================================================= */
-
+/* CONTENEDOR */
 .contenido {
     width: 100%;
     padding: 18px 20px;
@@ -135,10 +123,7 @@ h2 {
     padding-bottom: 10px;
 }
 
-/* =========================================================
-   ESTADISTICAS
-========================================================= */
-
+/* ESTADISTICAS */
 .estadisticas {
     display: grid;
     grid-template-columns: repeat(3, 160px);
@@ -161,32 +146,14 @@ h2 {
 
 .estadistica .texto {
     font-size: 12px;
-}
-
-.estadistica .texto {
     font-weight: bold;
 }
 
-.total {
-    background: #f5f7f9;
-}
+.total { background: #f5f7f9; }
+.entregadas { background: #ffebee; border-color: #ef9a9a; color: #c62828; }
+.recibidas { background: #e3f2fd; border-color: #90caf9; color: #1565c0; }
 
-.entregadas {
-    background: #ffebee;
-    border-color: #ef9a9a;
-    color: #c62828;
-}
-
-.recibidas {
-    background: #e3f2fd;
-    border-color: #90caf9;
-    color: #1565c0;
-}
-
-/* =========================================================
-   BARRA DE CONTROLES
-========================================================= */
-
+/* BARRA DE CONTROLES */
 .controles {
     display: flex;
     align-items: center;
@@ -194,10 +161,7 @@ h2 {
     margin-bottom: 12px;
 }
 
-.busqueda {
-    flex: 1;
-}
-
+.busqueda { flex: 1; }
 .busqueda input {
     width: 100%;
     padding: 11px;
@@ -215,41 +179,15 @@ h2 {
     white-space: nowrap;
 }
 
-.btn-filtro {
-    background: #e8edf1;
-    color: #455a64;
-}
+.btn-filtro { background: #e8edf1; color: #455a64; }
+.btn-filtro.activo { background: #1769aa; color: white; }
+.btn-csv { background: #2878d7; color: white; }
+.btn-sync { background: #2e7d32; color: white; }
+.btn-danger { background: #c62828; color: white; }
 
-.btn-filtro.activo {
-    background: #1769aa;
-    color: white;
-}
-
-.btn-csv {
-    background: #2878d7;
-    color: white;
-}
-
-.btn-danger {
-    background: #c62828;
-    color: white;
-}
-
-/* =========================================================
-   TABLA
-========================================================= */
-
-.tabla-contenedor {
-    width: 100%;
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
-}
-
+/* TABLA */
+.tabla-contenedor { width: 100%; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; table-layout: auto; }
 th {
     background: #1769aa;
     color: white;
@@ -258,61 +196,28 @@ th {
     font-size: 14px;
     white-space: nowrap;
 }
-
 td {
     border-bottom: 1px solid #e0e6eb;
     padding: 10px 9px;
     font-size: 14px;
     vertical-align: middle;
 }
+tr:nth-child(even) { background: #f8fafb; }
+tr:hover { background: #eef6fd; }
 
-tr:nth-child(even) {
-    background: #f8fafb;
-}
-
-tr:hover {
-    background: #eef6fd;
-}
-
-/* =========================================================
-   ESTADOS
-========================================================= */
-
-.estado-entregada {
-    color: #c62828;
-    font-weight: bold;
-}
-
-.estado-recibida {
-    color: #1565c0;
-    font-weight: bold;
-}
-
-.codigo-entregado {
-    color: #c62828;
-    font-weight: bold;
-}
-
+.estado-entregada { color: #c62828; font-weight: bold; }
+.estado-recibida { color: #1565c0; font-weight: bold; }
+.codigo-entregado { color: #c62828; font-weight: bold; }
 .codigo-recibido {
     color: #1565c0;
     font-weight: bold;
     text-decoration: line-through;
     text-decoration-thickness: 2px;
 }
+.netbook-click { cursor: pointer; user-select: text; }
+.netbook-click:hover { opacity: .65; }
 
-.netbook-click {
-    cursor: pointer;
-    user-select: text;
-}
-
-.netbook-click:hover {
-    opacity: .65;
-}
-
-/* =========================================================
-   REGISTRO
-========================================================= */
-
+/* REGISTRO */
 .registro-grid {
     display: grid;
     grid-template-columns: 420px 1fr;
@@ -326,14 +231,8 @@ tr:hover {
     margin-bottom: 15px;
 }
 
-.movimientos input {
-    display: none;
-}
-
-.movimientos label {
-    margin: 0;
-    cursor: pointer;
-}
+.movimientos input { display: none; }
+.movimientos label { margin: 0; cursor: pointer; }
 
 .movimiento {
     display: block;
@@ -373,19 +272,8 @@ input[type="text"] {
     font-size: 14px;
 }
 
-.btn-camera {
-    width: 100%;
-    background: #2878d7;
-    color: white;
-    margin-bottom: 8px;
-}
-
-.btn-detener {
-    width: 100%;
-    background: #607d8b;
-    color: white;
-    margin-bottom: 8px;
-}
+.btn-camera { width: 100%; background: #2878d7; color: white; margin-bottom: 8px; }
+.btn-detener { width: 100%; background: #607d8b; color: white; margin-bottom: 8px; }
 
 #reader {
     display: none;
@@ -405,35 +293,13 @@ input[type="text"] {
     margin-bottom: 10px;
 }
 
-.codigo-manual {
-    display: flex;
-    gap: 7px;
-}
+.codigo-manual { display: flex; gap: 7px; }
+.btn-agregar { background: #1769aa; color: white; }
 
-.btn-agregar {
-    background: #1769aa;
-    color: white;
-}
-
-.selector-titulo {
-    display: block;
-    margin: 12px 0 6px;
-    font-weight: bold;
-}
-
-.selector {
-    display: flex;
-    gap: 6px;
-}
-
-.selector label {
-    margin: 0;
-}
-
-.selector input {
-    display: none;
-}
-
+.selector-titulo { display: block; margin: 12px 0 6px; font-weight: bold; }
+.selector { display: flex; gap: 6px; }
+.selector label { margin: 0; }
+.selector input { display: none; }
 .selector span {
     display: block;
     padding: 8px 13px;
@@ -477,19 +343,8 @@ input[type="text"] {
     border-radius: 6px;
 }
 
-.btn-quitar {
-    background: #78909c;
-    color: white;
-    padding: 5px 9px;
-}
-
-.btn-guardar {
-    width: 100%;
-    margin-top: 10px;
-    background: #1769aa;
-    color: white;
-    font-size: 16px;
-}
+.btn-quitar { background: #78909c; color: white; padding: 5px 9px; }
+.btn-guardar { width: 100%; margin-top: 10px; background: #1769aa; color: white; font-size: 16px; }
 
 #mensaje {
     display: none;
@@ -499,28 +354,11 @@ input[type="text"] {
     font-weight: bold;
 }
 
-/* =========================================================
-   GENERADOR QR
-========================================================= */
-
-.qr-contenedor {
-    max-width: 650px;
-    margin: 0 auto;
-}
-
-.qr-form {
-    display: flex;
-    gap: 10px;
-}
-
-.qr-form input {
-    flex: 1;
-}
-
-.btn-generar {
-    background: #7654b8;
-    color: white;
-}
+/* GENERADOR QR */
+.qr-contenedor { max-width: 650px; margin: 0 auto; }
+.qr-form { display: flex; gap: 10px; }
+.qr-form input { flex: 1; }
+.btn-generar { background: #7654b8; color: white; }
 
 .etiqueta {
     width: 260px;
@@ -542,2232 +380,630 @@ input[type="text"] {
     margin-bottom: 15px;
 }
 
-#qrcode {
-    margin-bottom: 15px;
-}
+#qrcode { margin-bottom: 15px; }
+#labelCode { font-size: 22px; font-weight: bold; }
+.btn-imprimir { width: 100%; background: #455a64; color: white; }
 
-#labelCode {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.btn-imprimir {
-    width: 100%;
-    background: #455a64;
-    color: white;
-}
-
-/* =========================================================
-   FUNCIONAMIENTO
-========================================================= */
-
-.funcionamiento {
-    max-width: 1000px;
-    margin: auto;
-}
-
-.funcion-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.funcion {
-    padding: 18px;
-    border-radius: 9px;
-    border: 1px solid #dce5eb;
-    background: #f8fafb;
-}
-
-.funcion h3 {
-    color: #1769aa;
-    margin-top: 0;
-}
-
-.funcion p {
-    line-height: 1.5;
-}
-
-/* =========================================================
-   IMPRESION
-========================================================= */
+/* FUNCIONAMIENTO */
+.funcionamiento { max-width: 1000px; margin: auto; }
+.funcion-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.funcion { padding: 18px; border-radius: 9px; border: 1px solid #dce5eb; background: #f8fafb; }
+.funcion h3 { color: #1769aa; margin-top: 0; }
+.funcion p { line-height: 1.5; }
 
 @media print {
-
-    @page {
-        margin: 0;
-    }
-
-    body * {
-        visibility: hidden;
-    }
-
-    #etiqueta,
-    #etiqueta * {
-        visibility: visible;
-    }
-
+    @page { margin: 0; }
+    body * { visibility: hidden; }
+    #etiqueta, #etiqueta * { visibility: visible; }
     #etiqueta {
         position: absolute;
-        left: 0;
-        top: 0;
-        margin: 0;
+        left: 0; top: 0; margin: 0;
         border: 1px solid #000;
-        width: 60mm;
-        min-height: 70mm;
+        width: 60mm; min-height: 70mm;
     }
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     ENCABEZADO
-========================================================= -->
-
 <header class="header">
-
     <div class="header-inner">
-
         <div class="titulo">
-
-            <div class="titulo-icono">
-                💻
-            </div>
-
+            <div class="titulo-icono">💻</div>
             <div>
-
-                <h1>
-                    CONTROL DE NETBOOKS
-                </h1>
-
-                <p>
-                    CET 3 · Registro de entrega y recepción
-                </p>
-
+                <h1>CONTROL DE NETBOOKS</h1>
+                <p>CET 3 · Registro de entrega y recepción</p>
             </div>
-
         </div>
-
-        <div id="reloj">
-            Cargando...
-        </div>
-
+        <div id="reloj">Cargando...</div>
     </div>
-
-
-    <!-- =====================================================
-         MENU
-    ====================================================== -->
 
     <nav class="menu">
-
-        <button
-            id="menuRegistro"
-            class="activo"
-            onclick="mostrarPantalla('registro')">
-
-            📋 REGISTROS
-
-        </button>
-
-
-        <button
-            id="menuQR"
-            onclick="mostrarPantalla('qr')">
-
-            🔲 GENERAR QR
-
-        </button>
-
-
-        <button
-            id="menuFuncionamiento"
-            onclick="mostrarPantalla('funcionamiento')">
-
-            ℹ️ FUNCIONAMIENTO
-
-        </button>
-
+        <button id="menuRegistro" class="activo" onclick="mostrarPantalla('registro')">📋 REGISTROS</button>
+        <button id="menuQR" onclick="mostrarPantalla('qr')">🔲 GENERAR QR</button>
+        <button id="menuFuncionamiento" onclick="mostrarPantalla('funcionamiento')">ℹ️ FUNCIONAMIENTO</button>
     </nav>
-
 </header>
 
-
-<!-- =========================================================
-     PANTALLA REGISTROS
-========================================================= -->
-
-<section
-    id="pantallaRegistro"
-    class="pantalla activa">
-
+<section id="pantallaRegistro" class="pantalla activa">
     <div class="contenido">
-
         <div class="registro-grid">
 
-
-            <!-- =================================================
-                 REGISTRAR
-            ================================================== -->
-
             <div class="card">
-
-                <h2>
-                    📋 Registrar movimiento
-                </h2>
-
-
+                <h2>📋 Registrar movimiento</h2>
                 <div class="movimientos">
-
                     <label>
-
-                        <input
-                            type="radio"
-                            name="movimiento"
-                            value="Salida (Entrega)"
-                            checked
-                            onchange="cambiarMovimiento()">
-
-                        <span class="movimiento entrega">
-                            📤 ENTREGA
-                        </span>
-
+                        <input type="radio" name="movimiento" value="Salida (Entrega)" checked onchange="cambiarMovimiento()">
+                        <span class="movimiento entrega">📤 ENTREGA</span>
                     </label>
-
-
                     <label>
-
-                        <input
-                            type="radio"
-                            name="movimiento"
-                            value="Entrada (Recepción)"
-                            onchange="cambiarMovimiento()">
-
-                        <span class="movimiento recepcion">
-                            📥 RECEPCIÓN
-                        </span>
-
+                        <input type="radio" name="movimiento" value="Entrada (Recepción)" onchange="cambiarMovimiento()">
+                        <span class="movimiento recepcion">📥 RECEPCIÓN</span>
                     </label>
-
                 </div>
-
 
                 <div id="estadoEntrada">
-
                     📥 <strong>Modo recepción</strong><br>
-
-                    Escaneá o escribí solamente el
-                    código de la netbook.
-
+                    Escaneá o escribí solamente el código de la netbook.
                 </div>
 
-
-                <button
-                    class="btn btn-camera"
-                    onclick="iniciarCamara()">
-
-                    📷 ESCANEAR QR
-
-                </button>
-
-
+                <button class="btn btn-camera" onclick="iniciarCamara()">📷 ESCANEAR QR</button>
                 <div id="reader"></div>
-
-
-                <button
-                    id="btnDetener"
-                    class="btn btn-detener"
-                    style="display:none"
-                    onclick="detenerCamara()">
-
-                    ⏹️ DETENER CÁMARA
-
-                </button>
-
+                <button id="btnDetener" class="btn btn-detener" style="display:none" onclick="detenerCamara()">⏹️ DETENER CÁMARA</button>
 
                 <form id="registroForm">
-
-
                     <div id="datosEntrega">
+                        <label class="titulo-campo">👤 Estudiante</label>
+                        <input type="text" id="estudiante" placeholder="Nombre y Apellido">
 
-                        <label class="titulo-campo">
-                            👤 Estudiante
-                        </label>
+                        <label class="titulo-campo">👨‍🏫 Profesor</label>
+                        <input type="text" id="profesor" placeholder="Profesor a cargo">
 
-                        <input
-                            type="text"
-                            id="estudiante"
-                            placeholder="Nombre y Apellido">
-
-
-                        <label class="titulo-campo">
-                            👨‍🏫 Profesor
-                        </label>
-
-                        <input
-                            type="text"
-                            id="profesor"
-                            placeholder="Profesor a cargo">
-
-
-                        <label class="titulo-campo">
-                            🎓 Curso
-                        </label>
-
-
-                        <span class="selector-titulo">
-                            Ciclo
-                        </span>
-
+                        <label class="titulo-campo">🎓 Curso</label>
+                        <span class="selector-titulo">Ciclo</span>
                         <div class="selector">
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="ciclo"
-                                    value="Ciclo Básico"
-                                    checked
-                                    onchange="actualizarCurso()">
-
-                                <span>
-                                    Ciclo Básico
-                                </span>
-                            </label>
-
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="ciclo"
-                                    value="Ciclo Superior"
-                                    onchange="actualizarCurso()">
-
-                                <span>
-                                    Ciclo Superior
-                                </span>
-                            </label>
-
+                            <label><input type="radio" name="ciclo" value="Ciclo Básico" checked onchange="actualizarCurso()"><span>Ciclo Básico</span></label>
+                            <label><input type="radio" name="ciclo" value="Ciclo Superior" onchange="actualizarCurso()"><span>Ciclo Superior</span></label>
                         </div>
 
-
-                        <span class="selector-titulo">
-                            Año
-                        </span>
-
+                        <span class="selector-titulo">Año</span>
                         <div class="selector">
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="grado"
-                                    value="1"
-                                    onchange="actualizarCurso()">
-
-                                <span>1°</span>
-                            </label>
-
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="grado"
-                                    value="2"
-                                    onchange="actualizarCurso()">
-
-                                <span>2°</span>
-                            </label>
-
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="grado"
-                                    value="3"
-                                    onchange="actualizarCurso()">
-
-                                <span>3°</span>
-                            </label>
-
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="grado"
-                                    value="4"
-                                    checked
-                                    onchange="actualizarCurso()">
-
-                                <span>4°</span>
-                            </label>
-
+                            <label><input type="radio" name="grado" value="1" onchange="actualizarCurso()"><span>1°</span></label>
+                            <label><input type="radio" name="grado" value="2" onchange="actualizarCurso()"><span>2°</span></label>
+                            <label><input type="radio" name="grado" value="3" onchange="actualizarCurso()"><span>3°</span></label>
+                            <label><input type="radio" name="grado" value="4" checked onchange="actualizarCurso()"><span>4°</span></label>
                         </div>
 
-
-                        <span class="selector-titulo">
-                            División
-                        </span>
-
+                        <span class="selector-titulo">División</span>
                         <div class="selector">
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="division"
-                                    value="1"
-                                    checked
-                                    onchange="actualizarCurso()">
-
-                                <span>1</span>
-                            </label>
-
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="division"
-                                    value="2"
-                                    onchange="actualizarCurso()">
-
-                                <span>2</span>
-                            </label>
-
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="division"
-                                    value="3"
-                                    onchange="actualizarCurso()">
-
-                                <span>3</span>
-                            </label>
-
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="division"
-                                    value="4"
-                                    onchange="actualizarCurso()">
-
-                                <span>4</span>
-                            </label>
-
+                            <label><input type="radio" name="division" value="1" checked onchange="actualizarCurso()"><span>1</span></label>
+                            <label><input type="radio" name="division" value="2" onchange="actualizarCurso()"><span>2</span></label>
+                            <label><input type="radio" name="division" value="3" onchange="actualizarCurso()"><span>3</span></label>
+                            <label><input type="radio" name="division" value="4" onchange="actualizarCurso()"><span>4</span></label>
                         </div>
 
-
-                        <div id="cursoSeleccionado">
-                            Ciclo Básico · 4° · 1° División
-                        </div>
-
+                        <div id="cursoSeleccionado">Ciclo Básico · 4° · 1° División</div>
                     </div>
 
-
-                    <label class="titulo-campo">
-                        💻 Código de Netbook
-                    </label>
-
-
+                    <label class="titulo-campo">💻 Código de Netbook</label>
                     <div class="codigo-manual">
-
-                        <input
-                            type="text"
-                            id="codigoManual"
-                            placeholder="Ej: NB-001">
-
-
-                        <button
-                            type="button"
-                            class="btn btn-agregar"
-                            onclick="agregarManual()">
-
-                            ➕ AGREGAR
-
-                        </button>
-
+                        <input type="text" id="codigoManual" placeholder="Ej: NB-001">
+                        <button type="button" class="btn btn-agregar" onclick="agregarManual()">➕ AGREGAR</button>
                     </div>
-
 
                     <div style="margin-top:12px;font-weight:bold;">
-
-                        Netbooks de esta operación:
-
-                        <span id="contador">
-                            0
-                        </span>
-
+                        Netbooks de esta operación: <span id="contador">0</span>
                     </div>
-
 
                     <ul id="listaNetbooks">
-
-                        <li>
-                            Todavía no hay netbooks.
-                        </li>
-
+                        <li>Todavía no hay netbooks.</li>
                     </ul>
 
-
                     <div id="mensaje"></div>
-
-
-                    <button
-                        type="submit"
-                        class="btn btn-guardar">
-
-                        💾 REGISTRAR OPERACIÓN
-
-                    </button>
-
+                    <button type="submit" class="btn btn-guardar">💾 REGISTRAR OPERACIÓN</button>
                 </form>
-
             </div>
-
-
-            <!-- =================================================
-                 TABLA
-            ================================================== -->
 
             <div class="card">
-
-                <h2>
-                    📊 Estado de las Netbooks
-                </h2>
-
+                <h2>📊 Estado de las Netbooks</h2>
 
                 <div class="estadisticas">
-
                     <div class="estadistica total">
-
-                        <span
-                            id="total"
-                            class="numero">
-                            0
-                        </span>
-
-                        <span class="texto">
-                            💻 TOTAL
-                        </span>
-
+                        <span id="total" class="numero">0</span>
+                        <span class="texto">💻 TOTAL</span>
                     </div>
-
-
                     <div class="estadistica entregadas">
-
-                        <span
-                            id="totalEntregadas"
-                            class="numero">
-                            0
-                        </span>
-
-                        <span class="texto">
-                            🔴 ENTREGADAS
-                        </span>
-
+                        <span id="totalEntregadas" class="numero">0</span>
+                        <span class="texto">🔴 ENTREGADAS</span>
                     </div>
-
-
                     <div class="estadistica recibidas">
-
-                        <span
-                            id="totalRecibidas"
-                            class="numero">
-                            0
-                        </span>
-
-                        <span class="texto">
-                            🔵 RECIBIDAS
-                        </span>
-
+                        <span id="totalRecibidas" class="numero">0</span>
+                        <span class="texto">🔵 RECIBIDAS</span>
                     </div>
-
                 </div>
-
 
                 <div class="controles">
-
                     <div class="busqueda">
-
-                        <input
-                            type="text"
-                            id="buscar"
-                            placeholder="🔎 Buscar netbook, estudiante, profesor o curso..."
-                            oninput="cargarTabla()">
-
+                        <input type="text" id="buscar" placeholder="🔎 Buscar netbook, estudiante, profesor o curso..." oninput="cargarTabla()">
                     </div>
-
-
-                    <button
-                        id="filtroTodas"
-                        class="btn btn-filtro activo"
-                        onclick="cambiarFiltro('todas')">
-
-                        TODAS
-
-                    </button>
-
-
-                    <button
-                        id="filtroEntregadas"
-                        class="btn btn-filtro"
-                        onclick="cambiarFiltro('entregadas')">
-
-                        🔴 ENTREGADAS
-
-                    </button>
-
-
-                    <button
-                        id="filtroRecibidas"
-                        class="btn btn-filtro"
-                        onclick="cambiarFiltro('recibidas')">
-
-                        🔵 RECIBIDAS
-
-                    </button>
-
+                    <button id="filtroTodas" class="btn btn-filtro activo" onclick="cambiarFiltro('todas')">TODAS</button>
+                    <button id="filtroEntregadas" class="btn btn-filtro" onclick="cambiarFiltro('entregadas')">🔴 ENTREGADAS</button>
+                    <button id="filtroRecibidas" class="btn btn-filtro" onclick="cambiarFiltro('recibidas')">🔵 RECIBIDAS</button>
                 </div>
 
-
-                <div
-                    class="controles"
-                    style="justify-content:flex-end;">
-
-                    <button
-                        class="btn btn-csv"
-                        onclick="exportarCSV()">
-
-                        📥 DESCARGAR CSV
-
-                    </button>
-
-
-                    <button
-                        class="btn btn-danger"
-                        onclick="borrarDatos()">
-
-                        🗑️ BORRAR HISTORIAL
-
-                    </button>
-
+                <div class="controles" style="justify-content:flex-end;">
+                    <button class="btn btn-sync" onclick="sincronizarConNube()">🔄 RESTAURAR DE LA NUBE</button>
+                    <button class="btn btn-csv" onclick="exportarCSV()">📥 DESCARGAR CSV</button>
+                    <button class="btn btn-danger" onclick="borrarDatos()">🗑️ BORRAR HISTORIAL LOCAL</button>
                 </div>
-
 
                 <div class="tabla-contenedor">
-
                     <table>
-
                         <thead>
-
                             <tr>
-
-                                <th>
-                                    FECHA / HORA
-                                </th>
-
-                                <th>
-                                    NETBOOK
-                                </th>
-
-                                <th>
-                                    ESTADO
-                                </th>
-
-                                <th>
-                                    ESTUDIANTE
-                                </th>
-
-                                <th>
-                                    PROFESOR
-                                </th>
-
-                                <th>
-                                    CURSO / DIVISIÓN
-                                </th>
-
+                                <th>FECHA / HORA</th>
+                                <th>NETBOOK</th>
+                                <th>ESTADO</th>
+                                <th>ESTUDIANTE</th>
+                                <th>PROFESOR</th>
+                                <th>CURSO / DIVISIÓN</th>
                             </tr>
-
                         </thead>
-
-
                         <tbody id="tablaRegistros"></tbody>
-
                     </table>
-
                 </div>
-
             </div>
 
         </div>
-
     </div>
-
 </section>
 
-
-<!-- =========================================================
-     PANTALLA GENERAR QR
-========================================================= -->
-
-<section
-    id="pantallaQR"
-    class="pantalla">
-
+<section id="pantallaQR" class="pantalla">
     <div class="contenido">
-
         <div class="card qr-contenedor">
-
-            <h2>
-                🔲 Generar etiqueta QR
-            </h2>
-
-
+            <h2>🔲 Generar etiqueta QR</h2>
             <div class="qr-form">
-
-                <input
-                    type="text"
-                    id="inputQR"
-                    placeholder="Código de Netbook, por ejemplo NB-001">
-
-
-                <button
-                    class="btn btn-generar"
-                    onclick="generarQR()">
-
-                    🔲 GENERAR QR
-
-                </button>
-
+                <input type="text" id="inputQR" placeholder="Código de Netbook, por ejemplo NB-001">
+                <button class="btn btn-generar" onclick="generarQR()">🔲 GENERAR QR</button>
             </div>
 
-
-            <div
-                id="etiqueta"
-                class="etiqueta">
-
-                <div class="cet3">
-                    CET 3
-                </div>
-
-
+            <div id="etiqueta" class="etiqueta">
+                <div class="cet3">CET 3</div>
                 <div id="qrcode"></div>
-
-
-                <div id="labelCode">
-                    NETBOOK
-                </div>
-
+                <div id="labelCode">NETBOOK</div>
             </div>
 
-
-            <button
-                class="btn btn-imprimir"
-                onclick="imprimirQR()">
-
-                🖨️ IMPRIMIR ETIQUETA
-
-            </button>
-
+            <button class="btn btn-imprimir" onclick="imprimirQR()">🖨️ IMPRIMIR ETIQUETA</button>
         </div>
-
     </div>
-
 </section>
 
-
-<!-- =========================================================
-     PANTALLA FUNCIONAMIENTO
-========================================================= -->
-
-<section
-    id="pantallaFuncionamiento"
-    class="pantalla">
-
+<section id="pantallaFuncionamiento" class="pantalla">
     <div class="contenido">
-
         <div class="card funcionamiento">
-
-            <h2>
-                ℹ️ Funcionamiento del sistema
-            </h2>
-
-
+            <h2>ℹ️ Funcionamiento del sistema</h2>
             <div class="funcion-grid">
-
-
                 <div class="funcion">
-
-                    <h3>
-                        📤 Entrega
-                    </h3>
-
-                    <p>
-                        Seleccioná <strong>ENTREGA</strong>.
-                    </p>
-
-                    <p>
-                        Ingresá el estudiante, profesor
-                        y curso.
-                    </p>
-
-                    <p>
-                        Después podés escanear una,
-                        dos, tres o todas las netbooks
-                        que lleva esa persona.
-                    </p>
-
+                    <h3>📤 Entrega</h3>
+                    <p>Seleccioná <strong>ENTREGA</strong>. Ingresá estudiante, profesor y curso, y luego escaneá las netbooks.</p>
                 </div>
-
-
                 <div class="funcion">
-
-                    <h3>
-                        📥 Recepción
-                    </h3>
-
-                    <p>
-                        Seleccioná
-                        <strong>RECEPCIÓN</strong>.
-                    </p>
-
-                    <p>
-                        Solamente tenés que escanear
-                        o escribir el código.
-                    </p>
-
-                    <p>
-                        El sistema modifica la fila
-                        existente.
-                    </p>
-
+                    <h3>📥 Recepción</h3>
+                    <p>Seleccioná <strong>RECEPCIÓN</strong>. Escaneá o escribí el código para registrar la devolución.</p>
                 </div>
-
-
                 <div class="funcion">
-
-                    <h3>
-                        🖱️ Cambiar estado
-                    </h3>
-
-                    <p>
-                        En la tabla, hacé clic sobre
-                        el código de una netbook.
-                    </p>
-
-                    <p>
-                        El sistema permite cambiar
-                        entre <strong>ENTREGADA</strong>
-                        y <strong>RECIBIDA</strong>.
-                    </p>
-
+                    <h3>🔄 Respaldos Automáticos</h3>
+                    <p>Todos los registros se guardan automáticamente en la nube. Si borrás el historial local, podés usar el botón <strong>RESTAURAR DE LA NUBE</strong> para recuperarlos.</p>
                 </div>
-
-
                 <div class="funcion">
-
-                    <h3>
-                        🎨 Estados
-                    </h3>
-
-                    <p>
-                        <strong style="color:#c62828">
-                            🔴 ENTREGADA
-                        </strong>
-                        aparece en rojo.
-                    </p>
-
-                    <p>
-                        <strong style="color:#1565c0">
-                            🔵 RECIBIDA
-                        </strong>
-                        aparece en azul.
-                    </p>
-
-                    <p>
-                        El código recibido aparece
-                        tachado con una sola línea.
-                    </p>
-
+                    <h3>🎨 Estados</h3>
+                    <p><strong style="color:#c62828">🔴 ENTREGADA</strong> y <strong style="color:#1565c0">🔵 RECIBIDA</strong>.</p>
                 </div>
-
-
-                <div class="funcion">
-
-                    <h3>
-                        📥 CSV
-                    </h3>
-
-                    <p>
-                        El botón
-                        <strong>DESCARGAR CSV</strong>
-                        genera una planilla que puede
-                        abrirse con Excel o LibreOffice.
-                    </p>
-
-                </div>
-
-
-                <div class="funcion">
-
-                    <h3>
-                        🔲 Código QR
-                    </h3>
-
-                    <p>
-                        En la pestaña
-                        <strong>GENERAR QR</strong>
-                        podés crear e imprimir las
-                        etiquetas de las netbooks.
-                    </p>
-
-                    <p>
-                        La etiqueta incluye
-                        <strong>CET 3</strong>.
-                    </p>
-
-                </div>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
-
 
 <script>
-
-/* =========================================================
-   VARIABLES
-========================================================= */
+// PEGA AQUÍ TU URL DE GOOGLE APPS SCRIPT
+const URL_SCRIPT = "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI";
 
 let scanner = null;
-
 let lista = [];
-
 let filtro = "todas";
 
-
-/* =========================================================
-   RELOJ
-========================================================= */
-
 function actualizarReloj() {
-
     const ahora = new Date();
-
-    const fecha =
-        ahora.toLocaleDateString(
-            "es-AR",
-            {
-                weekday: "long",
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-            }
-        );
-
-    const hora =
-        ahora.toLocaleTimeString(
-            "es-AR",
-            {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-            }
-        );
-
-    document.getElementById("reloj").innerText =
-        "📅 " + fecha + "   🕐 " + hora;
+    const fecha = ahora.toLocaleDateString("es-AR", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
+    const hora = ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    document.getElementById("reloj").innerText = "📅 " + fecha + "   🕐 " + hora;
 }
-
-setInterval(
-    actualizarReloj,
-    1000
-);
-
+setInterval(actualizarReloj, 1000);
 actualizarReloj();
 
-
-/* =========================================================
-   CAMBIAR PANTALLA
-========================================================= */
-
 function mostrarPantalla(nombre) {
-
-    document
-        .querySelectorAll(".pantalla")
-        .forEach(
-            p => p.classList.remove("activa")
-        );
-
-
-    document
-        .querySelectorAll(".menu button")
-        .forEach(
-            b => b.classList.remove("activo")
-        );
-
+    document.querySelectorAll(".pantalla").forEach(p => p.classList.remove("activa"));
+    document.querySelectorAll(".menu button").forEach(b => b.classList.remove("activo"));
 
     if(nombre === "registro") {
-
-        document
-            .getElementById("pantallaRegistro")
-            .classList.add("activa");
-
-        document
-            .getElementById("menuRegistro")
-            .classList.add("activo");
-
+        document.getElementById("pantallaRegistro").classList.add("activa");
+        document.getElementById("menuRegistro").classList.add("activo");
     }
-
-
     if(nombre === "qr") {
-
-        document
-            .getElementById("pantallaQR")
-            .classList.add("activa");
-
-        document
-            .getElementById("menuQR")
-            .classList.add("activo");
-
+        document.getElementById("pantallaQR").classList.add("activa");
+        document.getElementById("menuQR").classList.add("activo");
         detenerCamara();
-
     }
-
-
     if(nombre === "funcionamiento") {
-
-        document
-            .getElementById("pantallaFuncionamiento")
-            .classList.add("activa");
-
-        document
-            .getElementById("menuFuncionamiento")
-            .classList.add("activo");
-
+        document.getElementById("pantallaFuncionamiento").classList.add("activa");
+        document.getElementById("menuFuncionamiento").classList.add("activo");
         detenerCamara();
-
     }
 }
-
-
-/* =========================================================
-   REGISTROS
-========================================================= */
 
 function obtenerRegistros() {
-
-    return JSON.parse(
-        localStorage.getItem("db_netbooks")
-    ) || [];
-
+    return JSON.parse(localStorage.getItem("db_netbooks")) || [];
 }
 
-
-/* =========================================================
-   MOVIMIENTO
-========================================================= */
-
 function cambiarMovimiento() {
+    const movimiento = document.querySelector('input[name="movimiento"]:checked').value;
+    const recepcion = movimiento === "Entrada (Recepción)";
 
-    const movimiento =
-        document.querySelector(
-            'input[name="movimiento"]:checked'
-        ).value;
-
-
-    const recepcion =
-        movimiento === "Entrada (Recepción)";
-
-
-    document.getElementById(
-        "datosEntrega"
-    ).style.display =
-        recepcion ? "none" : "block";
-
-
-    document.getElementById(
-        "estadoEntrada"
-    ).style.display =
-        recepcion ? "block" : "none";
-
-
-    document.getElementById(
-        "estudiante"
-    ).required =
-        !recepcion;
-
-
-    document.getElementById(
-        "profesor"
-    ).required =
-        !recepcion;
-
+    document.getElementById("datosEntrega").style.display = recepcion ? "none" : "block";
+    document.getElementById("estadoEntrada").style.display = recepcion ? "block" : "none";
+    document.getElementById("estudiante").required = !recepcion;
+    document.getElementById("profesor").required = !recepcion;
 
     lista = [];
-
     actualizarLista();
 }
 
-
-/* =========================================================
-   CURSO
-========================================================= */
-
 function actualizarCurso() {
-
-    const ciclo =
-        document.querySelector(
-            'input[name="ciclo"]:checked'
-        ).value;
-
-
-    const grado =
-        document.querySelector(
-            'input[name="grado"]:checked'
-        ).value;
-
-
-    const division =
-        document.querySelector(
-            'input[name="division"]:checked'
-        ).value;
-
-
-    document.getElementById(
-        "cursoSeleccionado"
-    ).innerText =
-        ciclo +
-        " · " +
-        grado +
-        "° · " +
-        division +
-        "° División";
+    const ciclo = document.querySelector('input[name="ciclo"]:checked').value;
+    const grado = document.querySelector('input[name="grado"]:checked').value;
+    const division = document.querySelector('input[name="division"]:checked').value;
+    document.getElementById("cursoSeleccionado").innerText = ciclo + " · " + grado + "° · " + division + "° División";
 }
 
-
-/* =========================================================
-   BUSCAR NETBOOK
-========================================================= */
-
 function buscarNetbook(codigo) {
-
-    const registros =
-        obtenerRegistros();
-
-
-    for(
-        let i = registros.length - 1;
-        i >= 0;
-        i--
-    ) {
-
-        if(
-            String(
-                registros[i].numNetbook
-            ).toUpperCase() ===
-            codigo.toUpperCase()
-        ) {
-
-            return {
-                registro: registros[i],
-                indice: i
-            };
-
+    const registros = obtenerRegistros();
+    for(let i = registros.length - 1; i >= 0; i--) {
+        if(String(registros[i].numNetbook).toUpperCase() === codigo.toUpperCase()) {
+            return { registro: registros[i], indice: i };
         }
-
     }
-
-
     return null;
 }
 
-
-/* =========================================================
-   AGREGAR
-========================================================= */
-
 function agregarNetbook(codigo) {
+    codigo = codigo.trim();
+    if(!codigo) return false;
 
-    codigo =
-        codigo.trim();
+    const movimiento = document.querySelector('input[name="movimiento"]:checked').value;
+    const encontrado = buscarNetbook(codigo);
 
-
-    if(!codigo) {
-
-        return false;
-
-    }
-
-
-    const movimiento =
-        document.querySelector(
-            'input[name="movimiento"]:checked'
-        ).value;
-
-
-    const encontrado =
-        buscarNetbook(codigo);
-
-
-    if(
-        movimiento === "Entrada (Recepción)"
-    ) {
-
+    if(movimiento === "Entrada (Recepción)") {
         if(!encontrado) {
-
-            mostrarMensaje(
-                "⚠️ " +
-                codigo +
-                " no está registrada.",
-                true
-            );
-
+            mostrarMensaje("⚠️ " + codigo + " no está registrada.", true);
             return false;
         }
-
-
-        if(
-            encontrado.registro.estado ===
-            "RECIBIDA"
-        ) {
-
-            mostrarMensaje(
-                "⚠️ " +
-                codigo +
-                " ya está recibida.",
-                true
-            );
-
+        if(encontrado.registro.estado === "RECIBIDA") {
+            mostrarMensaje("⚠️ " + codigo + " ya está recibida.", true);
             return false;
         }
-
     }
 
-
-    if(
-        movimiento === "Salida (Entrega)" &&
-        encontrado &&
-        encontrado.registro.estado ===
-        "ENTREGADA"
-    ) {
-
-        mostrarMensaje(
-            "⚠️ " +
-            codigo +
-            " ya está entregada.",
-            true
-        );
-
+    if(movimiento === "Salida (Entrega)" && encontrado && encontrado.registro.estado === "ENTREGADA") {
+        mostrarMensaje("⚠️ " + codigo + " ya está entregada.", true);
         return false;
     }
 
-
-    if(
-        lista.some(
-            x =>
-            x.toUpperCase() ===
-            codigo.toUpperCase()
-        )
-    ) {
-
-        mostrarMensaje(
-            "⚠️ El código ya está en la lista.",
-            true
-        );
-
+    if(lista.some(x => x.toUpperCase() === codigo.toUpperCase())) {
+        mostrarMensaje("⚠️ El código ya está en la lista.", true);
         return false;
     }
-
 
     lista.push(codigo);
-
     actualizarLista();
-
-    mostrarMensaje(
-        "✓ " + codigo + " agregado.",
-        false
-    );
-
+    mostrarMensaje("✓ " + codigo + " agregado.", false);
     return true;
 }
 
-
-/* =========================================================
-   INGRESO MANUAL
-========================================================= */
-
 function agregarManual() {
-
-    const campo =
-        document.getElementById(
-            "codigoManual"
-        );
-
-
-    if(
-        agregarNetbook(
-            campo.value
-        )
-    ) {
-
+    const campo = document.getElementById("codigoManual");
+    if(agregarNetbook(campo.value)) {
         campo.value = "";
-
         campo.focus();
-
     }
 }
 
-
-document.getElementById(
-    "codigoManual"
-).addEventListener(
-    "keydown",
-    function(e) {
-
-        if(e.key === "Enter") {
-
-            e.preventDefault();
-
-            agregarManual();
-
-        }
-
+document.getElementById("codigoManual").addEventListener("keydown", function(e) {
+    if(e.key === "Enter") {
+        e.preventDefault();
+        agregarManual();
     }
-);
-
-
-/* =========================================================
-   LISTA
-========================================================= */
+});
 
 function actualizarLista() {
-
-    const ul =
-        document.getElementById(
-            "listaNetbooks"
-        );
-
-
-    document.getElementById(
-        "contador"
-    ).innerText =
-        lista.length;
-
-
+    const ul = document.getElementById("listaNetbooks");
+    document.getElementById("contador").innerText = lista.length;
     ul.innerHTML = "";
 
-
     if(lista.length === 0) {
-
-        ul.innerHTML =
-            "<li>Todavía no hay netbooks.</li>";
-
+        ul.innerHTML = "<li>Todavía no hay netbooks.</li>";
         return;
     }
 
-
-    lista.forEach(
-        (codigo, indice) => {
-
-            const li =
-                document.createElement("li");
-
-
-            li.innerHTML =
-                `
-                <span>${escapeHTML(codigo)}</span>
-
-                <button
-                    type="button"
-                    class="btn btn-quitar"
-                    onclick="quitar(${indice})">
-
-                    ✕
-
-                </button>
-                `;
-
-
-            ul.appendChild(li);
-
-        }
-    );
+    lista.forEach((codigo, indice) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span>${escapeHTML(codigo)}</span><button type="button" class="btn btn-quitar" onclick="quitar(${indice})">✕</button>`;
+        ul.appendChild(li);
+    });
 }
 
-
 function quitar(indice) {
-
-    lista.splice(
-        indice,
-        1
-    );
-
+    lista.splice(indice, 1);
     actualizarLista();
 }
 
-
-/* =========================================================
-   CAMARA
-========================================================= */
-
 function iniciarCamara() {
+    document.getElementById("reader").style.display = "block";
+    document.getElementById("btnDetener").style.display = "block";
+    if(scanner) return;
 
-    document.getElementById(
-        "reader"
-    ).style.display =
-        "block";
+    scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    scanner.render(function(decodedText) { agregarNetbook(decodedText); }, function(error) {});
+}
 
-
-    document.getElementById(
-        "btnDetener"
-    ).style.display =
-        "block";
-
-
+function detenerCamara() {
     if(scanner) {
+        scanner.clear().catch(function(error) { console.log(error); });
+        scanner = null;
+    }
+    document.getElementById("reader").style.display = "none";
+    document.getElementById("btnDetener").style.display = "none";
+}
 
+document.getElementById("registroForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    if(lista.length === 0) {
+        alert("Agregá al menos una netbook.");
         return;
     }
 
+    const ahora = new Date();
+    const fechaHora = ahora.toLocaleDateString("es-AR") + " " + ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+    const movimiento = document.querySelector('input[name="movimiento"]:checked').value;
+    let registros = obtenerRegistros();
+    let nuevosRegistros = [];
 
-    scanner =
-        new Html5QrcodeScanner(
-            "reader",
-            {
-                fps: 10,
-                qrbox: 250
+    if(movimiento === "Entrada (Recepción)") {
+        lista.forEach(codigo => {
+            const encontrado = buscarNetbook(codigo);
+            if(encontrado) {
+                registros[encontrado.indice].estado = "RECIBIDA";
+                registros[encontrado.indice].movimiento = "Entrada (Recepción)";
+                registros[encontrado.indice].fechaHora = fechaHora;
+                nuevosRegistros.push(registros[encontrado.indice]);
             }
-        );
+        });
+    } else {
+        const estudiante = document.getElementById("estudiante").value.trim();
+        const profesor = document.getElementById("profesor").value.trim();
+        const ciclo = document.querySelector('input[name="ciclo"]:checked').value;
+        const grado = document.querySelector('input[name="grado"]:checked').value;
+        const division = document.querySelector('input[name="division"]:checked').value;
+        const curso = ciclo + " · " + grado + "° · " + division + "° División";
 
-
-    scanner.render(
-        function(decodedText) {
-
-            agregarNetbook(
-                decodedText
-            );
-
-        },
-        function(error) {}
-    );
-}
-
-
-function detenerCamara() {
-
-    if(scanner) {
-
-        scanner.clear()
-            .catch(
-                function(error) {
-                    console.log(error);
-                }
-            );
-
-        scanner = null;
+        lista.forEach(codigo => {
+            const reg = {
+                fechaHora: fechaHora,
+                numNetbook: codigo,
+                movimiento: "Salida (Entrega)",
+                estudiante: estudiante,
+                profesor: profesor,
+                curso: curso,
+                estado: "ENTREGADA"
+            };
+            registros.push(reg);
+            nuevosRegistros.push(reg);
+        });
     }
 
+    localStorage.setItem("db_netbooks", JSON.stringify(registros));
+    
+    // GUARDADO AUTOMÁTICO EN LA NUBE (GOOGLE SHEETS)
+    guardarEnNube(nuevosRegistros);
 
-    document.getElementById(
-        "reader"
-    ).style.display =
-        "none";
+    lista = [];
+    actualizarLista();
+    document.getElementById("registroForm").reset();
+    document.querySelector('input[name="movimiento"][value="Salida (Entrega)"]').checked = true;
 
+    cambiarMovimiento();
+    actualizarCurso();
+    cargarTabla();
+    detenerCamara();
 
-    document.getElementById(
-        "btnDetener"
-    ).style.display =
-        "none";
+    alert("✓ Operación registrada correctamente.");
+});
+
+function guardarEnNube(registrosNuevos) {
+    if(!URL_SCRIPT || URL_SCRIPT === "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI") return;
+    fetch(URL_SCRIPT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "guardar", registros: registrosNuevos })
+    }).catch(err => console.error("Error respaldando en la nube:", err));
 }
 
-
-/* =========================================================
-   GUARDAR
-========================================================= */
-
-document.getElementById(
-    "registroForm"
-).addEventListener(
-    "submit",
-    function(e) {
-
-        e.preventDefault();
-
-
-        if(lista.length === 0) {
-
-            alert(
-                "Agregá al menos una netbook."
-            );
-
-            return;
-        }
-
-
-        const ahora =
-            new Date();
-
-
-        const fechaHora =
-            ahora.toLocaleDateString(
-                "es-AR"
-            ) +
-            " " +
-            ahora.toLocaleTimeString(
-                "es-AR",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                }
-            );
-
-
-        const movimiento =
-            document.querySelector(
-                'input[name="movimiento"]:checked'
-            ).value;
-
-
-        let registros =
-            obtenerRegistros();
-
-
-        /* =================================================
-           RECEPCION
-        ================================================= */
-
-        if(
-            movimiento ===
-            "Entrada (Recepción)"
-        ) {
-
-            lista.forEach(
-                codigo => {
-
-                    const encontrado =
-                        buscarNetbook(
-                            codigo
-                        );
-
-
-                    if(encontrado) {
-
-                        registros[
-                            encontrado.indice
-                        ].estado =
-                            "RECIBIDA";
-
-
-                        registros[
-                            encontrado.indice
-                        ].movimiento =
-                            "Entrada (Recepción)";
-
-
-                        registros[
-                            encontrado.indice
-                        ].fechaHora =
-                            fechaHora;
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        /* =================================================
-           ENTREGA
-        ================================================= */
-
-        else {
-
-            const estudiante =
-                document.getElementById(
-                    "estudiante"
-                ).value.trim();
-
-
-            const profesor =
-                document.getElementById(
-                    "profesor"
-                ).value.trim();
-
-
-            const ciclo =
-                document.querySelector(
-                    'input[name="ciclo"]:checked'
-                ).value;
-
-
-            const grado =
-                document.querySelector(
-                    'input[name="grado"]:checked'
-                ).value;
-
-
-            const division =
-                document.querySelector(
-                    'input[name="division"]:checked'
-                ).value;
-
-
-            const curso =
-                ciclo +
-                " · " +
-                grado +
-                "° · " +
-                division +
-                "° División";
-
-
-            lista.forEach(
-                codigo => {
-
-                    registros.push({
-
-                        fechaHora:
-                            fechaHora,
-
-                        numNetbook:
-                            codigo,
-
-                        movimiento:
-                            "Salida (Entrega)",
-
-                        estudiante:
-                            estudiante,
-
-                        profesor:
-                            profesor,
-
-                        curso:
-                            curso,
-
-                        estado:
-                            "ENTREGADA"
-
-                    });
-
-                }
-            );
-
-        }
-
-
-        localStorage.setItem(
-            "db_netbooks",
-            JSON.stringify(
-                registros
-            )
-        );
-
-
-        lista = [];
-
-        actualizarLista();
-
-        document.getElementById(
-            "registroForm"
-        ).reset();
-
-
-        document.querySelector(
-            'input[name="movimiento"][value="Salida (Entrega)"]'
-        ).checked = true;
-
-
-        cambiarMovimiento();
-
-        actualizarCurso();
-
-        cargarTabla();
-
-        detenerCamara();
-
-
-        alert(
-            "✓ Operación registrada correctamente."
-        );
-
+function sincronizarConNube() {
+    if(!URL_SCRIPT || URL_SCRIPT === "https://script.google.com/macros/s/AKfycbzelhn5zTgtH-rGgfKZdN03Bs2hCNJ1f99A-IC3pgfow8iLUNFH7NK9oazLOoKgZIRj/exec") {
+        alert("Configurá la URL de Apps Script primero.");
+        return;
     }
-);
-
-
-/* =========================================================
-   TABLA
-========================================================= */
+    
+    mostrarMensaje("🔄 Sincronizando datos...", false);
+    fetch(URL_SCRIPT)
+        .then(res => res.json())
+        .then(data => {
+            if(Array.isArray(data)) {
+                localStorage.setItem("db_netbooks", JSON.stringify(data));
+                cargarTabla();
+                alert("✓ Registros recuperados con éxito desde la nube.");
+            }
+        })
+        .catch(err => {
+            console.error("Error al recuperar datos:", err);
+            alert("Error al intentar recuperar los datos de la nube.");
+        });
+}
 
 function cargarTabla() {
-
-    const registros =
-        obtenerRegistros();
-
-
-    const busqueda =
-        document.getElementById(
-            "buscar"
-        ).value.toLowerCase();
-
-
-    const tabla =
-        document.getElementById(
-            "tablaRegistros"
-        );
-
-
+    const registros = obtenerRegistros();
+    const busqueda = document.getElementById("buscar").value.toLowerCase();
+    const tabla = document.getElementById("tablaRegistros");
     tabla.innerHTML = "";
-
 
     let entregadas = 0;
     let recibidas = 0;
 
+    registros.forEach(r => {
+        if(r.estado === "ENTREGADA") entregadas++;
+        else recibidas++;
+    });
 
-    registros.forEach(
-        r => {
+    document.getElementById("total").innerText = registros.length;
+    document.getElementById("totalEntregadas").innerText = entregadas;
+    document.getElementById("totalRecibidas").innerText = recibidas;
 
-            if(
-                r.estado ===
-                "ENTREGADA"
-            )
-                entregadas++;
-            else
-                recibidas++;
+    registros.slice().reverse().forEach(r => {
+        if(filtro === "entregadas" && r.estado !== "ENTREGADA") return;
+        if(filtro === "recibidas" && r.estado !== "RECIBIDA") return;
 
-        }
-    );
+        const texto = (r.numNetbook + " " + (r.estudiante || "") + " " + (r.profesor || "") + " " + (r.curso || "")).toLowerCase();
+        if(busqueda && !texto.includes(busqueda)) return;
 
+        const recibida = r.estado === "RECIBIDA";
+        const fila = document.createElement("tr");
 
-    document.getElementById(
-        "total"
-    ).innerText =
-        registros.length;
-
-
-    document.getElementById(
-        "totalEntregadas"
-    ).innerText =
-        entregadas;
-
-
-    document.getElementById(
-        "totalRecibidas"
-    ).innerText =
-        recibidas;
-
-
-    registros
-        .slice()
-        .reverse()
-        .forEach(
-            r => {
-
-                if(
-                    filtro === "entregadas" &&
-                    r.estado !== "ENTREGADA"
-                )
-                    return;
-
-
-                if(
-                    filtro === "recibidas" &&
-                    r.estado !== "RECIBIDA"
-                )
-                    return;
-
-
-                const texto =
-                    (
-                        r.numNetbook +
-                        " " +
-                        (r.estudiante || "") +
-                        " " +
-                        (r.profesor || "") +
-                        " " +
-                        (r.curso || "")
-                    ).toLowerCase();
-
-
-                if(
-                    busqueda &&
-                    !texto.includes(busqueda)
-                )
-                    return;
-
-
-                const recibida =
-                    r.estado === "RECIBIDA";
-
-
-                const fila =
-                    document.createElement("tr");
-
-
-                fila.innerHTML =
-                    `
-                    <td>
-                        ${escapeHTML(r.fechaHora)}
-                    </td>
-
-                    <td>
-
-                        <span
-                            class="${recibida ? "codigo-recibido" : "codigo-entregado"} netbook-click"
-                            title="Hacer clic para cambiar el estado"
-                            onclick="cambiarEstado('${escapeAtributo(r.numNetbook)}')">
-
-                            ${escapeHTML(r.numNetbook)}
-
-                        </span>
-
-                    </td>
-
-                    <td>
-
-                        <span class="${recibida ? "estado-recibida" : "estado-entregada"}">
-
-                            ${recibida ? "🔵 RECIBIDA" : "🔴 ENTREGADA"}
-
-                        </span>
-
-                    </td>
-
-                    <td>
-                        ${escapeHTML(r.estudiante || "—")}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(r.profesor || "—")}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(r.curso || "—")}
-                    </td>
-                    `;
-
-
-                tabla.appendChild(
-                    fila
-                );
-
-            }
-        );
+        fila.innerHTML = `
+            <td>${escapeHTML(r.fechaHora)}</td>
+            <td>
+                <span class="${recibida ? "codigo-recibido" : "codigo-entregado"} netbook-click" title="Hacer clic para cambiar el estado" onclick="cambiarEstado('${escapeAtributo(r.numNetbook)}')">
+                    ${escapeHTML(r.numNetbook)}
+                </span>
+            </td>
+            <td><span class="${recibida ? "estado-recibida" : "estado-entregada"}">${recibida ? "🔵 RECIBIDA" : "🔴 ENTREGADA"}</span></td>
+            <td>${escapeHTML(r.estudiante || "—")}</td>
+            <td>${escapeHTML(r.profesor || "—")}</td>
+            <td>${escapeHTML(r.curso || "—")}</td>
+        `;
+        tabla.appendChild(fila);
+    });
 }
-
-
-/* =========================================================
-   CAMBIAR ESTADO CON CLICK
-========================================================= */
 
 function cambiarEstado(codigo) {
+    const encontrado = buscarNetbook(codigo);
+    if(!encontrado) return;
 
-    const encontrado =
-        buscarNetbook(codigo);
+    const nuevo = encontrado.registro.estado === "ENTREGADA" ? "RECIBIDA" : "ENTREGADA";
+    if(!confirm("¿Cambiar " + codigo + " a " + nuevo + "?")) return;
 
+    let registros = obtenerRegistros();
+    registros[encontrado.indice].estado = nuevo;
+    registros[encontrado.indice].movimiento = nuevo === "RECIBIDA" ? "Entrada (Recepción)" : "Salida (Entrega)";
 
-    if(!encontrado)
-        return;
+    const ahora = new Date();
+    registros[encontrado.indice].fechaHora = ahora.toLocaleDateString("es-AR") + " " + ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
 
-
-    const nuevo =
-        encontrado.registro.estado ===
-        "ENTREGADA"
-        ? "RECIBIDA"
-        : "ENTREGADA";
-
-
-    if(
-        !confirm(
-            "¿Cambiar " +
-            codigo +
-            " a " +
-            nuevo +
-            "?"
-        )
-    )
-        return;
-
-
-    let registros =
-        obtenerRegistros();
-
-
-    registros[
-        encontrado.indice
-    ].estado =
-        nuevo;
-
-
-    registros[
-        encontrado.indice
-    ].movimiento =
-        nuevo === "RECIBIDA"
-        ? "Entrada (Recepción)"
-        : "Salida (Entrega)";
-
-
-    const ahora =
-        new Date();
-
-
-    registros[
-        encontrado.indice
-    ].fechaHora =
-        ahora.toLocaleDateString(
-            "es-AR"
-        ) +
-        " " +
-        ahora.toLocaleTimeString(
-            "es-AR",
-            {
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
-
-
-    localStorage.setItem(
-        "db_netbooks",
-        JSON.stringify(
-            registros
-        )
-    );
-
-
+    localStorage.setItem("db_netbooks", JSON.stringify(registros));
+    guardarEnNube([registros[encontrado.indice]]);
     cargarTabla();
 }
-
-
-/* =========================================================
-   FILTROS
-========================================================= */
 
 function cambiarFiltro(nuevo) {
-
     filtro = nuevo;
-
-
-    document
-        .querySelectorAll(".btn-filtro")
-        .forEach(
-            b =>
-                b.classList.remove("activo")
-        );
-
-
-    if(nuevo === "todas")
-        document
-            .getElementById("filtroTodas")
-            .classList.add("activo");
-
-
-    if(nuevo === "entregadas")
-        document
-            .getElementById("filtroEntregadas")
-            .classList.add("activo");
-
-
-    if(nuevo === "recibidas")
-        document
-            .getElementById("filtroRecibidas")
-            .classList.add("activo");
-
-
+    document.querySelectorAll(".btn-filtro").forEach(b => b.classList.remove("activo"));
+    if(nuevo === "todas") document.getElementById("filtroTodas").classList.add("activo");
+    if(nuevo === "entregadas") document.getElementById("filtroEntregadas").classList.add("activo");
+    if(nuevo === "recibidas") document.getElementById("filtroRecibidas").classList.add("activo");
     cargarTabla();
 }
 
-
-/* =========================================================
-   MENSAJE
-========================================================= */
-
-function mostrarMensaje(
-    texto,
-    error
-) {
-
-    const m =
-        document.getElementById(
-            "mensaje"
-        );
-
-
-    m.style.display =
-        "block";
-
-
-    m.innerText =
-        texto;
-
-
-    m.style.background =
-        error
-        ? "#ffebee"
-        : "#e3f2fd";
-
-
-    m.style.color =
-        error
-        ? "#c62828"
-        : "#1565c0";
-
-
-    setTimeout(
-        () => {
-            m.style.display = "none";
-        },
-        2500
-    );
+function mostrarMensaje(texto, error) {
+    const m = document.getElementById("mensaje");
+    m.style.display = "block";
+    m.innerText = texto;
+    m.style.background = error ? "#ffebee" : "#e3f2fd";
+    m.style.color = error ? "#c62828" : "#1565c0";
+    setTimeout(() => { m.style.display = "none"; }, 2500);
 }
-
-
-/* =========================================================
-   GENERADOR QR
-========================================================= */
 
 function generarQR() {
+    const codigo = document.getElementById("inputQR").value.trim();
+    if(!codigo) { alert("Ingresá el código."); return; }
 
-    const codigo =
-        document.getElementById(
-            "inputQR"
-        ).value.trim();
-
-
-    if(!codigo) {
-
-        alert(
-            "Ingresá el código."
-        );
-
-        return;
-    }
-
-
-    document.getElementById(
-        "qrcode"
-    ).innerHTML = "";
-
-
-    new QRCode(
-        document.getElementById(
-            "qrcode"
-        ),
-        {
-            text: codigo,
-            width: 180,
-            height: 180
-        }
-    );
-
-
-    document.getElementById(
-        "labelCode"
-    ).innerText =
-        codigo;
+    document.getElementById("qrcode").innerHTML = "";
+    new QRCode(document.getElementById("qrcode"), { text: codigo, width: 180, height: 180 });
+    document.getElementById("labelCode").innerText = codigo;
 }
 
-
-/* =========================================================
-   IMPRIMIR
-========================================================= */
-
 function imprimirQR() {
-
-    const codigo =
-        document.getElementById(
-            "inputQR"
-        ).value.trim();
-
-
-    if(
-        !codigo ||
-        document.getElementById(
-            "qrcode"
-        ).innerHTML === ""
-    ) {
-
-        alert(
-            "Primero generá el QR."
-        );
-
+    const codigo = document.getElementById("inputQR").value.trim();
+    if(!codigo || document.getElementById("qrcode").innerHTML === "") {
+        alert("Primero generá el QR.");
         return;
     }
-
-
     window.print();
 }
 
-
-/* =========================================================
-   CSV
-========================================================= */
-
 function exportarCSV() {
+    const registros = obtenerRegistros();
+    if(registros.length === 0) { alert("No hay registros."); return; }
 
-    const registros =
-        obtenerRegistros();
+    let csv = "\uFEFFFecha y Hora;N° Netbook;Estado;Estudiante;Profesor;Curso/División\n";
+    registros.forEach(r => {
+        csv += `"${csvEscape(r.fechaHora)}";"${csvEscape(r.numNetbook)}";"${csvEscape(r.estado)}";"${csvEscape(r.estudiante || "")}";"${csvEscape(r.profesor || "")}";"${csvEscape(r.curso || "")}"\n`;
+    });
 
-
-    if(
-        registros.length === 0
-    ) {
-
-        alert(
-            "No hay registros."
-        );
-
-        return;
-    }
-
-
-    let csv =
-        "\uFEFFFecha y Hora;" +
-        "N° Netbook;" +
-        "Estado;" +
-        "Estudiante;" +
-        "Profesor;" +
-        "Curso/División\n";
-
-
-    registros.forEach(
-        r => {
-
-            csv +=
-                `"${csvEscape(r.fechaHora)}";` +
-                `"${csvEscape(r.numNetbook)}";` +
-                `"${csvEscape(r.estado)}";` +
-                `"${csvEscape(r.estudiante || "")}";` +
-                `"${csvEscape(r.profesor || "")}";` +
-                `"${csvEscape(r.curso || "")}"\n`;
-
-        }
-    );
-
-
-    const blob =
-        new Blob(
-            [csv],
-            {
-                type:
-                    "text/csv;charset=utf-8;"
-            }
-        );
-
-
-    const url =
-        URL.createObjectURL(blob);
-
-
-    const a =
-        document.createElement("a");
-
-
-    const fecha =
-        new Date()
-            .toLocaleDateString(
-                "es-AR"
-            )
-            .replaceAll(
-                "/",
-                "-"
-            );
-
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const fecha = new Date().toLocaleDateString("es-AR").replaceAll("/", "-");
 
     a.href = url;
-
-    a.download =
-        "Control_Netbooks_CET3_" +
-        fecha +
-        ".csv";
-
-
+    a.download = "Control_Netbooks_CET3_" + fecha + ".csv";
     a.click();
-
-
     URL.revokeObjectURL(url);
 }
 
-
-function csvEscape(text) {
-
-    return String(text)
-        .replaceAll(
-            '"',
-            '""'
-        );
-}
-
-
-/* =========================================================
-   BORRAR
-========================================================= */
+function csvEscape(text) { return String(text).replaceAll('"', '""'); }
 
 function borrarDatos() {
-
-    if(
-        confirm(
-            "⚠️ ¿Seguro que querés borrar TODO el historial?"
-        )
-    ) {
-
-        localStorage.removeItem(
-            "db_netbooks"
-        );
-
+    if(confirm("⚠️ ¿Seguro que querés borrar el historial LOCAL de esta computadora? (Los datos seguirán en la nube)")) {
+        localStorage.removeItem("db_netbooks");
         cargarTabla();
     }
 }
 
-
-/* =========================================================
-   SEGURIDAD
-========================================================= */
-
 function escapeHTML(texto) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        texto;
-
+    const div = document.createElement("div");
+    div.textContent = texto;
     return div.innerHTML;
 }
 
-
 function escapeAtributo(texto) {
-
-    return String(texto)
-        .replaceAll("\\", "\\\\")
-        .replaceAll("'", "\\'");
+    return String(texto).replaceAll("\\", "\\\\").replaceAll("'", "\\'");
 }
 
-
-/* =========================================================
-   INICIO
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        cargarTabla();
-
-        actualizarCurso();
-
-        cambiarMovimiento();
-
-    }
-);
-
+document.addEventListener("DOMContentLoaded", function() {
+    cargarTabla();
+    actualizarCurso();
+    cambiarMovimiento();
+});
 </script>
 
 </body>
