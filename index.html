@@ -1,840 +1,1010 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Tango ERP - CET N° 3</title>
-    
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230056b3'/><text x='50' y='68' font-size='55' font-weight='bold' font-family='Arial' fill='white' text-anchor='middle'>T3</text></svg>">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Vue 3 & FontAwesome -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<title>Control de Netbooks - CET 3</title>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    <style>
-        :root {
-            --primary: #0056b3;
-            --primary-dark: #003366;
-            --accent: #0088ff;
-            --bg: #f4f6f9;
-            --surface: #ffffff;
-            --text: #2c3e50;
-            --border: #dcdfe6;
-            --danger: #d9534f;
-            --success: #28a745;
-            --warning: #ffc107;
-        }
+<style>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
 
-        header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 10px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
-        .brand { display: flex; align-items: center; gap: 15px; }
-        .logo-cet3 { width: 45px; height: 45px; background: white; border-radius: 50%; border: 3px solid var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--primary); font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .brand-text h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.5px; }
-        .brand-text p { font-size: 0.75rem; opacity: 0.85; }
+body {
+    margin: 0;
+    background: #eef3f7;
+    color: #263238;
+}
 
-        .auth-panel { display: flex; align-items: center; gap: 12px; }
-        .user-info-tag { display: flex; flex-direction: column; text-align: right; font-size: 0.8rem; }
-        .user-info-tag .user-name { font-weight: bold; }
-        .user-info-tag .user-email { font-size: 0.75rem; opacity: 0.85; }
+/* ENCABEZADO */
+.header {
+    background: white;
+    border-top: 6px solid #1769aa;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
 
-        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; font-size: 0.85rem; }
-        .btn-google { background: white; color: var(--text); border: 1px solid var(--border); }
-        .btn-google:hover { background: #e8e8e8; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-secondary { background: #6c757d; color: white; }
+.header-inner {
+    width: 100%;
+    padding: 14px 25px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-        nav { background: var(--primary-dark); padding: 0 25px; display: flex; gap: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        nav button { background: transparent; color: rgba(255,255,255,0.7); border: none; padding: 12px 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 3px solid transparent; transition: all 0.2s; }
-        nav button:hover { color: white; background: rgba(255,255,255,0.05); }
-        nav button.active { color: white; border-bottom-color: var(--accent); background: rgba(255,255,255,0.1); }
+.titulo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
 
-        main { flex: 1; padding: 25px; max-width: 1400px; width: 100%; margin: 0 auto; }
-        .card { background: var(--surface); border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 20px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
+.titulo-icono {
+    font-size: 38px;
+}
 
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .form-group label { font-size: 0.8rem; font-weight: 700; color: #555; text-transform: uppercase; }
-        .form-control { padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.9rem; outline: none; }
-        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(0,86,179,0.1); }
+.titulo h1 {
+    margin: 0;
+    color: #1769aa;
+    font-size: 26px;
+}
 
-        .table-responsive { overflow-x: auto; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left; }
-        th { background: #f8f9fa; color: var(--primary-dark); font-weight: 700; padding: 10px; border-bottom: 2px solid var(--border); }
-        td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        tr:hover { background: #f8f9fa; }
+.titulo p {
+    margin: 2px 0 0;
+    color: #607d8b;
+}
 
-        .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
-        .badge-a { background: #e3f2fd; color: #0d47a1; }
-        .badge-b { background: #e8f5e9; color: #1b5e20; }
-        .badge-c { background: #fff3e0; color: #e65100; }
-        .badge-x { background: #ffebee; color: #b71c1c; }
+#reloj {
+    font-size: 16px;
+    font-weight: bold;
+    color: #455a64;
+    text-align: right;
+}
 
-        /* Estilos Ventana Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: white; border-radius: 8px; padding: 25px; width: 90%; max-width: 500px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+/* MENU */
+.menu {
+    display: flex;
+    width: 100%;
+    padding: 0 15px;
+    gap: 4px;
+}
 
-        footer { background: var(--primary-dark); color: white; text-align: center; padding: 12px; font-size: 0.8rem; margin-top: auto; border-top: 3px solid var(--accent); }
+.menu button {
+    border: none;
+    padding: 13px 25px;
+    background: #e4ebf0;
+    color: #455a64;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+}
 
-        @media screen { .print-only { display: none !important; } }
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; color: black; font-size: 9pt; }
-            main { padding: 0; max-width: 100%; }
-            @page { size: A4 portrait; margin: 8mm; }
-            .a4-page { width: 190mm; height: 275mm; border: 2px solid #000; padding: 8mm; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; }
-            .invoice-header { display: flex; border-bottom: 2px solid #000; padding-bottom: 5mm; position: relative; }
-            .header-left, .header-right { width: 45%; }
-            .header-center { width: 10%; text-align: center; }
-            .letra-box { border: 2px solid #000; font-size: 24pt; font-weight: bold; background: #eee; width: 40px; margin: 0 auto; text-anchor: center; text-align: center; }
-            .invoice-title { font-size: 14pt; font-weight: bold; }
-            .invoice-client { border: 1px solid #000; padding: 3mm; margin: 3mm 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2mm; }
-            .invoice-table { width: 100%; border-collapse: collapse; margin-top: 3mm; flex-grow: 1; }
-            .invoice-table th { border: 1px solid #000; background: #eee; padding: 2mm; text-align: left; }
-            .invoice-table td { border-x: 1px solid #000; padding: 2mm; vertical-align: top; }
-            .invoice-footer { border-top: 2px solid #000; padding-top: 3mm; }
-            .totals-grid { display: flex; justify-content: space-between; align-items: flex-end; }
-            .legal-disclaimer { border: 1px dashed #000; padding: 2mm; font-size: 7pt; text-align: center; font-weight: bold; background: #fff3cd; }
-            .cae-section { border-top: 1px solid #000; margin-top: 2mm; padding-top: 2mm; display: flex; justify-content: space-between; font-size: 8pt; }
-        }
-    </style>
+.menu button:hover {
+    background: #d7e1e8;
+}
+
+.menu button.activo {
+    background: #1769aa;
+    color: white;
+}
+
+/* PANTALLAS */
+.pantalla {
+    display: none;
+    width: 100%;
+}
+
+.pantalla.activa {
+    display: block;
+}
+
+/* CONTENEDOR */
+.contenido {
+    width: 100%;
+    padding: 18px 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+h2 {
+    margin-top: 0;
+    color: #1769aa;
+    border-bottom: 2px solid #e5edf3;
+    padding-bottom: 10px;
+}
+
+/* ESTADISTICAS */
+.estadisticas {
+    display: grid;
+    grid-template-columns: repeat(3, 160px);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.estadistica {
+    padding: 7px;
+    text-align: center;
+    border-radius: 6px;
+    border: 2px solid #dce5eb;
+}
+
+.estadistica .numero {
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.estadistica .texto {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.total { background: #f5f7f9; }
+.entregadas { background: #ffebee; border-color: #ef9a9a; color: #c62828; }
+.recibidas { background: #e3f2fd; border-color: #90caf9; color: #1565c0; }
+
+/* BARRA DE CONTROLES */
+.controles {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.busqueda { flex: 1; }
+.busqueda input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5dc;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.btn {
+    border: none;
+    border-radius: 7px;
+    padding: 11px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.btn-filtro { background: #e8edf1; color: #455a64; }
+.btn-filtro.activo { background: #1769aa; color: white; }
+.btn-csv { background: #2878d7; color: white; }
+.btn-sync { background: #2e7d32; color: white; }
+.btn-danger { background: #c62828; color: white; }
+
+/* TABLA */
+.tabla-contenedor { width: 100%; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; table-layout: auto; }
+th {
+    background: #1769aa;
+    color: white;
+    padding: 11px 9px;
+    text-align: left;
+    font-size: 14px;
+    white-space: nowrap;
+}
+td {
+    border-bottom: 1px solid #e0e6eb;
+    padding: 10px 9px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+tr:nth-child(even) { background: #f8fafb; }
+tr:hover { background: #eef6fd; }
+
+.estado-entregada { color: #c62828; font-weight: bold; }
+.estado-recibida { color: #1565c0; font-weight: bold; }
+.codigo-entregado { color: #c62828; font-weight: bold; }
+.codigo-recibido {
+    color: #1565c0;
+    font-weight: bold;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+.netbook-click { cursor: pointer; user-select: text; }
+.netbook-click:hover { opacity: .65; }
+
+/* REGISTRO */
+.registro-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 20px;
+}
+
+.movimientos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.movimientos input { display: none; }
+.movimientos label { margin: 0; cursor: pointer; }
+
+.movimiento {
+    display: block;
+    text-align: center;
+    padding: 13px;
+    border: 2px solid #cfd8dc;
+    border-radius: 8px;
+    background: #f4f6f7;
+    font-weight: bold;
+}
+
+.movimientos input:checked + .entrega {
+    background: #ffebee;
+    color: #c62828;
+    border-color: #c62828;
+}
+
+.movimientos input:checked + .recepcion {
+    background: #e3f2fd;
+    color: #1565c0;
+    border-color: #1565c0;
+}
+
+label.titulo-campo {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5dc;
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+.btn-camera { width: 100%; background: #2878d7; color: white; margin-bottom: 8px; }
+.btn-detener { width: 100%; background: #607d8b; color: white; margin-bottom: 8px; }
+
+#reader {
+    display: none;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+#estadoEntrada {
+    display: none;
+    padding: 12px;
+    background: #e3f2fd;
+    color: #1565c0;
+    border-left: 5px solid #1565c0;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.codigo-manual { display: flex; gap: 7px; }
+.btn-agregar { background: #1769aa; color: white; }
+
+.selector-titulo { display: block; margin: 12px 0 6px; font-weight: bold; }
+.selector { display: flex; gap: 6px; }
+.selector label { margin: 0; }
+.selector input { display: none; }
+.selector span {
+    display: block;
+    padding: 8px 13px;
+    border: 1px solid #cbd5dc;
+    background: #f5f7f8;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.selector input:checked + span {
+    background: #1769aa;
+    color: white;
+    border-color: #1769aa;
+}
+
+#cursoSeleccionado {
+    margin-top: 10px;
+    padding: 9px;
+    text-align: center;
+    border-radius: 6px;
+    background: #eef6fd;
+    color: #1769aa;
+    font-weight: bold;
+}
+
+#listaNetbooks {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+#listaNetbooks li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    margin-bottom: 5px;
+    background: #f5f8fa;
+    border: 1px solid #dce5eb;
+    border-radius: 6px;
+}
+
+.btn-quitar { background: #78909c; color: white; padding: 5px 9px; }
+.btn-guardar { width: 100%; margin-top: 10px; background: #1769aa; color: white; font-size: 16px; }
+
+#mensaje {
+    display: none;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+/* GENERADOR QR */
+.qr-contenedor { max-width: 650px; margin: 0 auto; }
+.qr-form { display: flex; gap: 10px; }
+.qr-form input { flex: 1; }
+.btn-generar { background: #7654b8; color: white; }
+
+.etiqueta {
+    width: 260px;
+    min-height: 310px;
+    margin: 25px auto;
+    border: 2px dashed #90a4ae;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
+
+.cet3 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1769aa;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+#qrcode { margin-bottom: 15px; }
+#labelCode { font-size: 22px; font-weight: bold; }
+.btn-imprimir { width: 100%; background: #455a64; color: white; }
+
+/* FUNCIONAMIENTO */
+.funcionamiento { max-width: 1000px; margin: auto; }
+.funcion-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.funcion { padding: 18px; border-radius: 9px; border: 1px solid #dce5eb; background: #f8fafb; }
+.funcion h3 { color: #1769aa; margin-top: 0; }
+.funcion p { line-height: 1.5; }
+
+@media print {
+    @page { margin: 0; }
+    body * { visibility: hidden; }
+    #etiqueta, #etiqueta * { visibility: visible; }
+    #etiqueta {
+        position: absolute;
+        left: 0; top: 0; margin: 0;
+        border: 1px solid #000;
+        width: 60mm; min-height: 70mm;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<div id="app">
-    <div class="no-print">
-        <header>
-            <div class="brand">
-                <div class="logo-cet3">CET3</div>
-                <div class="brand-text">
-                    <h1>Simulador Tango ERP</h1>
-                    <p>Entorno Didáctico Educativo | CET N° 3</p>
-                </div>
-            </div>
-            <div class="auth-panel">
-                <template v-if="user">
-                    <div class="user-info-tag">
-                        <span class="user-name"><i class="fa-solid fa-user-check"></i> {{ user.displayName }}</span>
-                        <span class="user-email">{{ user.email }}</span>
-                    </div>
-                    <button @click="saveToDrive" class="btn btn-success" :disabled="syncing"><i class="fa-solid fa-cloud-arrow-up"></i> {{ syncing ? 'Guardando...' : 'Guardar' }}</button>
-                    <button @click="logout" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i></button>
-                </template>
-                <template v-else>
-                    <button @click="login" class="btn btn-google"><i class="fa-brands fa-google"></i> Iniciar Sesión</button>
-                </template>
-            </div>
-        </header>
-
-        <nav v-if="user">
-            <button :class="{active: currentTab === 'empresa'}" @click="currentTab = 'empresa'"><i class="fa-solid fa-building"></i> Empresa</button>
-            <button :class="{active: currentTab === 'ventas'}" @click="currentTab = 'ventas'"><i class="fa-solid fa-cart-shopping"></i> Ventas</button>
-            <button :class="{active: currentTab === 'compras'}" @click="currentTab = 'compras'"><i class="fa-solid fa-bag-shopping"></i> Compras</button>
-            <button :class="{active: currentTab === 'stock'}" @click="currentTab = 'stock'"><i class="fa-solid fa-boxes-stacked"></i> Stock</button>
-            <button :class="{active: currentTab === 'contabilidad'}" @click="currentTab = 'contabilidad'"><i class="fa-solid fa-book-journal-whills"></i> Contabilidad</button>
-        </nav>
-
-        <main>
-            <div v-if="!user" class="card" style="text-align: center; padding: 50px;">
-                <i class="fa-solid fa-graduation-cap" style="font-size: 4rem; color: var(--primary); margin-bottom: 20px;"></i>
-                <h2>Bienvenido al Simulador Tango ERP</h2>
-                <p style="margin: 15px 0; color: #666;">Inicia sesión con tu cuenta institucional de Google para gestionar tus prácticas comerciales y guardar tus avances.</p>
-                <button @click="login" class="btn btn-primary" style="font-size: 1rem; padding: 12px 24px;"><i class="fa-brands fa-google"></i> Acceder con Google</button>
-            </div>
-
-            <template v-else>
-                <!-- TAB: EMPRESA (Configuración, Clientes y Proveedores) -->
-                <div v-if="currentTab === 'empresa'">
-                    <div class="card">
-                        <div class="card-title"> Configuración de la Empresa de Práctica</div>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Razón Social</label><input v-model="db.empresa.nombre" class="form-control"></div>
-                            <div class="form-group"><label>CUIT</label><input v-model="db.empresa.cuit" class="form-control"></div>
-                            <div class="form-group">
-                                <label>Condición IVA</label>
-                                <select v-model="db.empresa.condicion_iva" class="form-control">
-                                    <option value="RI">IVA Responsable Inscripto</option>
-                                    <option value="MONO">Responsable Monotributo</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>Inicio Actividades</label><input type="date" v-model="db.empresa.inicio_actividades" class="form-control"></div>
-                            <div class="form-group"><label>Punto de Venta</label><input type="number" v-model="db.empresa.pto_venta" class="form-control"></div>
-                        </div>
-                    </div>
-
-                    <!-- Agregar y listar Clientes -->
-                    <div class="card">
-                        <div class="card-title"> Alta de Clientes</div>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Razón Social / Nombre</label><input v-model="nuevoCliente.razon_social" class="form-control" placeholder="Ej: Comercial del Norte"></div>
-                            <div class="form-group"><label>CUIT / CUIL</label><input v-model="nuevoCliente.cuit" class="form-control" placeholder="20-12345678-9"></div>
-                            <div class="form-group">
-                                <label>Condición IVA</label>
-                                <select v-model="nuevoCliente.condicion_iva" class="form-control">
-                                    <option value="RI">Responsable Inscripto</option>
-                                    <option value="MONO">Monotributo</option>
-                                    <option value="CF">Consumidor Final</option>
-                                    <option value="EX">Exento</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="justify-content: flex-end;">
-                                <button @click="agregarCliente" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Guardar Cliente</button>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr><th>ID</th><th>Razón Social</th><th>CUIT</th><th>Condición IVA</th><th>Acción</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="c in db.clientes" :key="c.id">
-                                        <td>{{ c.id }}</td><td>{{ c.razon_social }}</td><td>{{ c.cuit }}</td><td>{{ c.condicion_iva }}</td>
-                                        <td><button @click="eliminarCliente(c.id)" class="btn btn-danger" style="padding: 2px 6px;"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Agregar y listar Proveedores -->
-                    <div class="card">
-                        <div class="card-title"> Alta de Proveedores</div>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Razón Social / Proveedor</label><input v-model="nuevoProveedor.razon_social" class="form-control" placeholder="Ej: Distribuidora Central SRL"></div>
-                            <div class="form-group"><label>CUIT</label><input v-model="nuevoProveedor.cuit" class="form-control" placeholder="30-88776655-4"></div>
-                            <div class="form-group">
-                                <label>Condición IVA</label>
-                                <select v-model="nuevoProveedor.condicion_iva" class="form-control">
-                                    <option value="RI">Responsable Inscripto</option>
-                                    <option value="MONO">Monotributo</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="justify-content: flex-end;">
-                                <button @click="agregarProveedor" class="btn btn-primary"><i class="fa-solid fa-truck"></i> Guardar Proveedor</button>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr><th>ID</th><th>Razón Social</th><th>CUIT</th><th>Condición IVA</th><th>Acción</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="p in db.proveedores" :key="p.id">
-                                        <td>{{ p.id }}</td><td>{{ p.razon_social }}</td><td>{{ p.cuit }}</td><td>{{ p.condicion_iva }}</td>
-                                        <td><button @click="eliminarProveedor(p.id)" class="btn btn-danger" style="padding: 2px 6px;"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB: VENTAS -->
-                <div v-if="currentTab === 'ventas'">
-                    <div class="card">
-                        <div class="card-title">
-                            <span>Nueva Emisión de Comprobante</span>
-                            <span class="badge" :class="'badge-' + tipoComprobanteCalculado.toLowerCase()">Factura {{ tipoComprobanteCalculado }}</span>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Cliente</label>
-                                <select v-model="nuevaVenta.cliente_id" class="form-control">
-                                    <option v-for="c in db.clientes" :value="c.id">{{ c.razon_social }} ({{ c.condicion_iva }})</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Tipo Documento</label>
-                                <select v-model="nuevaVenta.tipo_doc" class="form-control">
-                                    <option value="FACTURA">Factura Comercial</option>
-                                    <option value="PRESUPUESTO">Presupuesto / Remito (X)</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>Fecha</label><input type="date" v-model="nuevaVenta.fecha" class="form-control"></div>
-                        </div>
-
-                        <div style="border: 1px solid var(--border); padding: 15px; border-radius: 6px; margin: 15px 0;">
-                            <div class="form-grid">
-                                <div class="form-group" style="grid-column: span 2;">
-                                    <label>Artículo</label>
-                                    <select v-model="itemTemporal.articulo_id" class="form-control" @change="actualizarPrecioTemp">
-                                        <option v-for="a in db.articulos" :value="a.codigo">{{ a.codigo }} - {{ a.descripcion }} (Stock: {{ a.stock }})</option>
-                                    </select>
-                                </div>
-                                <div class="form-group"><label>Cantidad</label><input type="number" v-model.number="itemTemporal.cantidad" class="form-control" min="1"></div>
-                                <div class="form-group"><label>P. Unitario ($)</label><input type="number" v-model.number="itemTemporal.precio_unitario" class="form-control"></div>
-                                <div class="form-group" style="justify-content: flex-end;"><button @click="agregarItem" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Agregar</button></div>
-                            </div>
-
-                            <table style="margin-top: 10px;">
-                                <thead>
-                                    <tr><th>Código</th><th>Descripción</th><th>Cant.</th><th>P. Unit</th><th>Subtotal</th><th>Acción</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(it, idx) in nuevaVenta.items">
-                                        <td>{{ it.codigo }}</td><td>{{ it.descripcion }}</td><td>{{ it.cantidad }}</td>
-                                        <td>${{ formatNum(it.precio_unitario) }}</td><td>${{ formatNum(it.cantidad * it.precio_unitario) }}</td>
-                                        <td><button @click="nuevaVenta.items.splice(idx,1)" class="btn btn-danger" style="padding: 2px 6px;"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <p><strong>Subtotal Neto:</strong> ${{ formatNum(totalesVenta.neto) }}</p>
-                                <p><strong>IVA (21%):</strong> ${{ formatNum(totalesVenta.iva) }}</p>
-                                <p style="font-size: 1.2rem; color: var(--primary-dark);"><strong>Total:</strong> ${{ formatNum(totalesVenta.total) }}</p>
-                            </div>
-                            <button @click="emitirVenta" class="btn btn-success" style="font-size: 1rem; padding: 12px 24px;"><i class="fa-solid fa-file-invoice-dollar"></i> Emitir Comprobante</button>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-title"> Historial de Comprobantes Emitidos</div>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr><th>Fecha</th><th>Número</th><th>Letra</th><th>Cliente</th><th>Total</th><th>Acciones</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="v in db.ventas">
-                                        <td>{{ v.fecha }}</td><td>{{ v.numero }}</td>
-                                        <td><span class="badge" :class="'badge-' + v.letra.toLowerCase()">{{ v.letra }}</span></td>
-                                        <td>{{ getClienteNombre(v.cliente_id) }}</td>
-                                        <td>${{ formatNum(v.total) }}</td>
-                                        <td><button @click="imprimirComprobante(v)" class="btn btn-secondary"><i class="fa-solid fa-print"></i> Imprimir A4</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB: COMPRAS -->
-                <div v-if="currentTab === 'compras'">
-                    <div class="card">
-                        <div class="card-title"> Registrar Compra de Stock a Proveedor</div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Proveedor</label>
-                                <select v-model="nuevaCompra.proveedor_id" class="form-control">
-                                    <option v-for="p in db.proveedores" :value="p.id">{{ p.razon_social }} ({{ p.condicion_iva }})</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>N° Factura Proveedor</label><input v-model="nuevaCompra.numero" class="form-control" placeholder="0001-00001234"></div>
-                            <div class="form-group"><label>Fecha</label><input type="date" v-model="nuevaCompra.fecha" class="form-control"></div>
-                        </div>
-
-                        <div style="border: 1px solid var(--border); padding: 15px; border-radius: 6px; margin: 15px 0;">
-                            <div class="form-grid">
-                                <div class="form-group" style="grid-column: span 2;">
-                                    <label>Artículo a Ingresar</label>
-                                    <select v-model="itemCompraTemp.articulo_id" class="form-control" @change="actualizarCostoTemp">
-                                        <option v-for="a in db.articulos" :value="a.codigo">{{ a.codigo }} - {{ a.descripcion }}</option>
-                                    </select>
-                                </div>
-                                <div class="form-group"><label>Cantidad</label><input type="number" v-model.number="itemCompraTemp.cantidad" class="form-control" min="1"></div>
-                                <div class="form-group"><label>Costo Unitario ($)</label><input type="number" v-model.number="itemCompraTemp.precio_costo" class="form-control"></div>
-                                <div class="form-group" style="justify-content: flex-end;"><button @click="agregarItemCompra" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Agregar</button></div>
-                            </div>
-
-                            <table style="margin-top: 10px;">
-                                <thead>
-                                    <tr><th>Código</th><th>Descripción</th><th>Cant.</th><th>Costo Unit.</th><th>Subtotal</th><th>Acción</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(it, idx) in nuevaCompra.items">
-                                        <td>{{ it.codigo }}</td><td>{{ it.descripcion }}</td><td>{{ it.cantidad }}</td>
-                                        <td>${{ formatNum(it.precio_costo) }}</td><td>${{ formatNum(it.cantidad * it.precio_costo) }}</td>
-                                        <td><button @click="nuevaCompra.items.splice(idx,1)" class="btn btn-danger" style="padding: 2px 6px;"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <p style="font-size: 1.2rem; color: var(--primary-dark);"><strong>Total Compra:</strong> ${{ formatNum(totalCompra) }}</p>
-                            </div>
-                            <button @click="registrarCompra" class="btn btn-success" style="font-size: 1rem; padding: 12px 24px;"><i class="fa-solid fa-cart-flatbed"></i> Registar Compra y Sumar Stock</button>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-title"> Historial de Compras</div>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr><th>Fecha</th><th>N° Comprobante</th><th>Proveedor</th><th>Total</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="c in db.compras">
-                                        <td>{{ c.fecha }}</td><td>{{ c.numero }}</td><td>{{ getProveedorNombre(c.proveedor_id) }}</td><td>${{ formatNum(c.total) }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB: STOCK -->
-                <div v-if="currentTab === 'stock'" class="card">
-                    <div class="card-title">
-                        <span>Gestión de Inventario</span>
-                        <button @click="modalArticulo = true" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nuevo Artículo</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr><th>Código</th><th>Descripción</th><th>Costo</th><th>P. Venta</th><th>Existencia</th><th>Estado</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="a in db.articulos">
-                                    <td><strong>{{ a.codigo }}</strong></td><td>{{ a.descripcion }}</td>
-                                    <td>${{ formatNum(a.precio_costo) }}</td><td>${{ formatNum(a.precio_venta) }}</td>
-                                    <td>{{ a.stock }} u.</td>
-                                    <td>
-                                        <span v-if="a.stock <= a.punto_reorden" class="badge badge-x">Reorden Necesario</span>
-                                        <span v-else class="badge badge-b">OK</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB: CONTABILIDAD -->
-                <div v-if="currentTab === 'contabilidad'" class="card">
-                    <div class="card-title"> Libro Diario General (Partida Doble Automática)</div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr><th>#</th><th>Fecha</th><th>Concepto / Leyenda</th><th>Cuenta Contable</th><th>Debe ($)</th><th>Haber ($)</th></tr>
-                            </thead>
-                            <tbody>
-                                <template v-for="(asiento, idx) in db.libro_diario">
-                                    <tr v-for="(m, mIdx) in asiento.movimientos" :style="{background: mIdx === 0 ? '#fafafa' : 'white'}">
-                                        <td v-if="mIdx === 0" :rowspan="asiento.movimientos.length"><strong>{{ asiento.asiento_id }}</strong></td>
-                                        <td v-if="mIdx === 0" :rowspan="asiento.movimientos.length">{{ asiento.fecha }}</td>
-                                        <td v-if="mIdx === 0" :rowspan="asiento.movimientos.length"><em>{{ asiento.concepto }}</em></td>
-                                        <td :style="{paddingLeft: m.haber > 0 ? '30px' : '10px'}">{{ m.cuenta }}</td>
-                                        <td>{{ m.debe > 0 ? '$' + formatNum(m.debe) : '-' }}</td>
-                                        <td>{{ m.haber > 0 ? '$' + formatNum(m.haber) : '-' }}</td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </template>
-        </main>
-
-        <footer>
-            Institución: <b>CET N° 3</b> | Desarrollador: <b>Referente TIC Ricardo Iermito</b> | Plataforma Didáctica ERP
-        </footer>
-    </div>
-
-    <!-- MODAL NUEVO ARTICULO (STOCK) -->
-    <div v-if="modalArticulo" class="modal-overlay">
-        <div class="modal-content">
-            <h3>Nuevo Artículo de Stock</h3>
-            <div style="margin-top: 15px;">
-                <div class="form-group"><label>Código</label><input v-model="nuevoArticulo.codigo" class="form-control" placeholder="ART-03"></div>
-                <div class="form-group" style="margin-top: 10px;"><label>Descripción</label><input v-model="nuevoArticulo.descripcion" class="form-control" placeholder="Nombre del producto"></div>
-                <div class="form-group" style="margin-top: 10px;"><label>Precio Costo ($)</label><input type="number" v-model.number="nuevoArticulo.precio_costo" class="form-control"></div>
-                <div class="form-group" style="margin-top: 10px;"><label>Precio Venta ($)</label><input type="number" v-model.number="nuevoArticulo.precio_venta" class="form-control"></div>
-                <div class="form-group" style="margin-top: 10px;"><label>Stock Inicial</label><input type="number" v-model.number="nuevoArticulo.stock" class="form-control"></div>
-                <div class="form-group" style="margin-top: 10px;"><label>Punto de Reorden</label><input type="number" v-model.number="nuevoArticulo.punto_reorden" class="form-control"></div>
-            </div>
-            <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
-                <button @click="modalArticulo = false" class="btn btn-secondary">Cancelar</button>
-                <button @click="guardarArticulo" class="btn btn-primary">Guardar Artículo</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PRINT LAYOUT (A4 STRICT FORMAT) -->
-    <div v-if="facturaImpresion" class="print-only">
-        <div class="a4-page">
+<header class="header">
+    <div class="header-inner">
+        <div class="titulo">
+            <div class="titulo-icono">💻</div>
             <div>
-                <div class="invoice-header">
-                    <div class="header-left">
-                        <div class="invoice-title">{{ db.empresa.nombre }}</div>
-                        <p style="font-size: 8pt; margin-top: 2mm;">
-                            <strong>Domicilio:</strong> Av. Roca 123, General Roca<br>
-                            <strong>Condición IVA:</strong> {{ db.empresa.condicion_iva === 'RI' ? 'IVA Responsable Inscripto' : 'Monotributo' }}
-                        </p>
-                    </div>
-                    <div class="header-center">
-                        <div class="letra-box">{{ facturaImpresion.letra }}</div>
-                        <p style="font-size: 7pt; font-weight: bold; margin-top: 1mm;">COD. {{ getCodigoComprobante(facturaImpresion.letra) }}</p>
-                    </div>
-                    <div class="header-right" style="padding-left: 5mm;">
-                        <div class="invoice-title">{{ facturaImpresion.tipo_doc }}</div>
-                        <p style="font-size: 8pt; margin-top: 2mm;">
-                            <strong>Punto de Venta:</strong> {{ String(db.empresa.pto_venta).padStart(4,'0') }} <strong>Comp N°:</strong> {{ facturaImpresion.numero }}<br>
-                            <strong>Fecha Emisión:</strong> {{ facturaImpresion.fecha }}<br>
-                            <strong>CUIT:</strong> {{ db.empresa.cuit }}<br>
-                            <strong>Ing. Brutos:</strong> {{ db.empresa.cuit }}
-                        </p>
-                    </div>
+                <h1>CONTROL DE NETBOOKS</h1>
+                <p>CET 3 · Registro de entrega y recepción</p>
+            </div>
+        </div>
+        <div id="reloj">Cargando...</div>
+    </div>
+
+    <nav class="menu">
+        <button id="menuRegistro" class="activo" onclick="mostrarPantalla('registro')">📋 REGISTROS</button>
+        <button id="menuQR" onclick="mostrarPantalla('qr')">🔲 GENERAR QR</button>
+        <button id="menuFuncionamiento" onclick="mostrarPantalla('funcionamiento')">ℹ️ FUNCIONAMIENTO</button>
+    </nav>
+</header>
+
+<section id="pantallaRegistro" class="pantalla activa">
+    <div class="contenido">
+        <div class="registro-grid">
+
+            <div class="card">
+                <h2>📋 Registrar movimiento</h2>
+                <div class="movimientos">
+                    <label>
+                        <input type="radio" name="movimiento" value="Salida (Entrega)" checked onchange="cambiarMovimiento()">
+                        <span class="movimiento entrega">📤 ENTREGA</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="movimiento" value="Entrada (Recepción)" onchange="cambiarMovimiento()">
+                        <span class="movimiento recepcion">📥 RECEPCIÓN</span>
+                    </label>
                 </div>
 
-                <div class="invoice-client">
-                    <div>
-                        <strong>Cliente / Razón Social:</strong> {{ getCliente(facturaImpresion.cliente_id).razon_social }}<br>
-                        <strong>Domicilio:</strong> Calle Comercial 456
-                    </div>
-                    <div>
-                        <strong>CUIT / CUIL:</strong> {{ getCliente(facturaImpresion.cliente_id).cuit }}<br>
-                        <strong>Condición IVA:</strong> {{ getCliente(facturaImpresion.cliente_id).condicion_iva }}
-                    </div>
+                <div id="estadoEntrada">
+                    📥 <strong>Modo recepción</strong><br>
+                    Escaneá o escribí solamente el código de la netbook.
                 </div>
 
-                <table class="invoice-table">
-                    <thead>
-                        <tr>
-                            <th>Código</th><th>Descripción</th><th>Cant.</th><th>P. Unit.</th><th>% IVA</th><th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="it in facturaImpresion.items">
-                            <td>{{ it.codigo }}</td><td>{{ it.descripcion }}</td><td>{{ it.cantidad }}</td>
-                            <td>${{ formatNum(it.precio_unitario) }}</td>
-                            <td>{{ facturaImpresion.letra === 'A' ? '21%' : '0%' }}</td>
-                            <td>${{ formatNum(it.cantidad * it.precio_unitario) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <button class="btn btn-camera" onclick="iniciarCamara()">📷 ESCANEAR QR</button>
+                <div id="reader"></div>
+                <button id="btnDetener" class="btn btn-detener" style="display:none" onclick="detenerCamara()">⏹️ DETENER CÁMARA</button>
+
+                <form id="registroForm">
+                    <div id="datosEntrega">
+                        <label class="titulo-campo">👤 Estudiante</label>
+                        <input type="text" id="estudiante" placeholder="Nombre y Apellido">
+
+                        <label class="titulo-campo">👨‍🏫 Profesor</label>
+                        <input type="text" id="profesor" placeholder="Profesor a cargo">
+
+                        <label class="titulo-campo">🎓 Curso</label>
+                        <span class="selector-titulo">Ciclo</span>
+                        <div class="selector">
+                            <label><input type="radio" name="ciclo" value="Ciclo Básico" checked onchange="actualizarCurso()"><span>Ciclo Básico</span></label>
+                            <label><input type="radio" name="ciclo" value="Ciclo Superior" onchange="actualizarCurso()"><span>Ciclo Superior</span></label>
+                        </div>
+
+                        <span class="selector-titulo">Año</span>
+                        <div class="selector">
+                            <label><input type="radio" name="grado" value="1" onchange="actualizarCurso()"><span>1°</span></label>
+                            <label><input type="radio" name="grado" value="2" onchange="actualizarCurso()"><span>2°</span></label>
+                            <label><input type="radio" name="grado" value="3" onchange="actualizarCurso()"><span>3°</span></label>
+                            <label><input type="radio" name="grado" value="4" checked onchange="actualizarCurso()"><span>4°</span></label>
+                        </div>
+
+                        <span class="selector-titulo">División</span>
+                        <div class="selector">
+                            <label><input type="radio" name="division" value="1" checked onchange="actualizarCurso()"><span>1</span></label>
+                            <label><input type="radio" name="division" value="2" onchange="actualizarCurso()"><span>2</span></label>
+                            <label><input type="radio" name="division" value="3" onchange="actualizarCurso()"><span>3</span></label>
+                            <label><input type="radio" name="division" value="4" onchange="actualizarCurso()"><span>4</span></label>
+                        </div>
+
+                        <div id="cursoSeleccionado">Ciclo Básico · 4° · 1° División</div>
+                    </div>
+
+                    <label class="titulo-campo">💻 Código de Netbook</label>
+                    <div class="codigo-manual">
+                        <input type="text" id="codigoManual" placeholder="Ej: NB-001">
+                        <button type="button" class="btn btn-agregar" onclick="agregarManual()">➕ AGREGAR</button>
+                    </div>
+
+                    <div style="margin-top:12px;font-weight:bold;">
+                        Netbooks de esta operación: <span id="contador">0</span>
+                    </div>
+
+                    <ul id="listaNetbooks">
+                        <li>Todavía no hay netbooks.</li>
+                    </ul>
+
+                    <div id="mensaje"></div>
+                    <button type="submit" class="btn btn-guardar">💾 REGISTRAR OPERACIÓN</button>
+                </form>
             </div>
 
-            <div class="invoice-footer">
-                <div class="legal-disclaimer">
-                    *** SISTEMA DIDÁCTICO EDUCATIVO - DOCUMENTO SIN VALIDEZ FISCAL REAL ***
+            <div class="card">
+                <h2>📊 Estado de las Netbooks</h2>
+
+                <div class="estadisticas">
+                    <div class="estadistica total">
+                        <span id="total" class="numero">0</span>
+                        <span class="texto">💻 TOTAL</span>
+                    </div>
+                    <div class="estadistica entregadas">
+                        <span id="totalEntregadas" class="numero">0</span>
+                        <span class="texto">🔴 ENTREGADAS</span>
+                    </div>
+                    <div class="estadistica recibidas">
+                        <span id="totalRecibidas" class="numero">0</span>
+                        <span class="texto">🔵 RECIBIDAS</span>
+                    </div>
                 </div>
-                <div class="totals-grid" style="margin-top: 2mm;">
-                    <div style="font-size: 8pt;">
-                        <p><strong>Condición de Venta:</strong> Contado / Cta Cte</p>
-                        <p><strong>Observaciones:</strong> Emisión simulada ERP Tango CET N° 3</p>
+
+                <div class="controles">
+                    <div class="busqueda">
+                        <input type="text" id="buscar" placeholder="🔎 Buscar netbook, estudiante, profesor o curso..." oninput="cargarTabla()">
                     </div>
-                    <div style="text-align: right;">
-                        <p v-if="facturaImpresion.letra === 'A'">Subtotal Neto: ${{ formatNum(facturaImpresion.subtotal) }}</p>
-                        <p v-if="facturaImpresion.letra === 'A'">IVA 21%: ${{ formatNum(facturaImpresion.iva) }}</p>
-                        <p style="font-size: 11pt; font-weight: bold; border-top: 1px solid #000; padding-top: 1mm;">Total: ${{ formatNum(facturaImpresion.total) }}</p>
-                    </div>
+                    <button id="filtroTodas" class="btn btn-filtro activo" onclick="cambiarFiltro('todas')">TODAS</button>
+                    <button id="filtroEntregadas" class="btn btn-filtro" onclick="cambiarFiltro('entregadas')">🔴 ENTREGADAS</button>
+                    <button id="filtroRecibidas" class="btn btn-filtro" onclick="cambiarFiltro('recibidas')">🔵 RECIBIDAS</button>
                 </div>
-                <div class="cae-section">
-                    <div>
-                        <strong>CAE (Ficticio):</strong> {{ facturaImpresion.cae }}<br>
-                        <strong>Vencimiento CAE:</strong> {{ facturaImpresion.cae_vencimiento }}
-                    </div>
-                    <div style="text-align: right;">
-                        <strong>Página 1 de 1</strong>
-                    </div>
+
+                <div class="controles" style="justify-content:flex-end;">
+                    <button class="btn btn-sync" onclick="sincronizarConNube()">🔄 RESTAURAR DE LA NUBE</button>
+                    <button class="btn btn-csv" onclick="exportarCSV()">📥 DESCARGAR CSV</button>
+                    <button class="btn btn-danger" onclick="borrarDatos()">🗑️ BORRAR HISTORIAL LOCAL</button>
+                </div>
+
+                <div class="tabla-contenedor">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>FECHA / HORA</th>
+                                <th>NETBOOK</th>
+                                <th>ESTADO</th>
+                                <th>ESTUDIANTE</th>
+                                <th>PROFESOR</th>
+                                <th>CURSO / DIVISIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaRegistros"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="pantallaQR" class="pantalla">
+    <div class="contenido">
+        <div class="card qr-contenedor">
+            <h2>🔲 Generar etiqueta QR</h2>
+            <div class="qr-form">
+                <input type="text" id="inputQR" placeholder="Código de Netbook, por ejemplo NB-001">
+                <button class="btn btn-generar" onclick="generarQR()">🔲 GENERAR QR</button>
+            </div>
+
+            <div id="etiqueta" class="etiqueta">
+                <div class="cet3">CET 3</div>
+                <div id="qrcode"></div>
+                <div id="labelCode">NETBOOK</div>
+            </div>
+
+            <button class="btn btn-imprimir" onclick="imprimirQR()">🖨️ IMPRIMIR ETIQUETA</button>
+        </div>
+    </div>
+</section>
+
+<section id="pantallaFuncionamiento" class="pantalla">
+    <div class="contenido">
+        <div class="card funcionamiento">
+            <h2>ℹ️ Funcionamiento del sistema</h2>
+            <div class="funcion-grid">
+                <div class="funcion">
+                    <h3>📤 Entrega</h3>
+                    <p>Seleccioná <strong>ENTREGA</strong>. Ingresá estudiante, profesor y curso, y luego escaneá las netbooks.</p>
+                </div>
+                <div class="funcion">
+                    <h3>📥 Recepción</h3>
+                    <p>Seleccioná <strong>RECEPCIÓN</strong>. Escaneá o escribí el código para registrar la devolución.</p>
+                </div>
+                <div class="funcion">
+                    <h3>🔄 Respaldos Automáticos</h3>
+                    <p>Todos los registros se guardan automáticamente en la nube. Si borrás el historial local, podés usar el botón <strong>RESTAURAR DE LA NUBE</strong> para recuperarlos.</p>
+                </div>
+                <div class="funcion">
+                    <h3>🎨 Estados</h3>
+                    <p><strong style="color:#c62828">🔴 ENTREGADA</strong> y <strong style="color:#1565c0">🔵 RECIBIDA</strong>.</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <script>
-const { createApp } = Vue;
+// PEGA AQUÍ TU URL DE GOOGLE APPS SCRIPT
+const URL_SCRIPT = "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDytTstBUdilfgELQuiUl3uHdspmwQw5HI",
-  authDomain: "simulador-tango-cet3.firebaseapp.com",
-  projectId: "simulador-tango-cet3",
-  storageBucket: "simulador-tango-cet3.firebasestorage.app",
-  messagingSenderId: "75999171433",
-  appId: "1:75999171433:web:c8162ab881aa1d1caea3f8",
-  measurementId: "G-10VPT33RV1"
-};
+let scanner = null;
+let lista = [];
+let filtro = "todas";
 
-// Inicialización de Firebase Auth
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+function actualizarReloj() {
+    const ahora = new Date();
+    const fecha = ahora.toLocaleDateString("es-AR", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
+    const hora = ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    document.getElementById("reloj").innerText = "📅 " + fecha + "   🕐 " + hora;
 }
-const auth = firebase.auth();
-const googleProvider = new firebase.auth.GoogleAuthProvider();
+setInterval(actualizarReloj, 1000);
+actualizarReloj();
 
-// Forzar selector de cuenta para evitar auto-logins erróneos
-googleProvider.setCustomParameters({
-  prompt: 'select_account'
-});
+function mostrarPantalla(nombre) {
+    document.querySelectorAll(".pantalla").forEach(p => p.classList.remove("activa"));
+    document.querySelectorAll(".menu button").forEach(b => b.classList.remove("activo"));
 
-createApp({
-    data() {
-        return {
-            user: null,
-            currentTab: 'ventas',
-            syncing: false,
-            modalArticulo: false,
-            facturaImpresion: null,
-            db: {
-                empresa: { nombre: 'Mi Empresa Práctica SRL', cuit: '30-11223344-5', condicion_iva: 'RI', inicio_actividades: '2026-01-01', pto_venta: 1 },
-                clientes: [
-                    { id: 1, razon_social: 'Comercial del Sur SA', cuit: '30-99887766-4', condicion_iva: 'RI' },
-                    { id: 2, razon_social: 'Juan Pérez (Consumidor Final)', cuit: '20-33445566-7', condicion_iva: 'CF' }
-                ],
-                proveedores: [
-                    { id: 1, razon_social: 'Distribuidora Papelera SRL', cuit: '30-55443322-1', condicion_iva: 'RI' }
-                ],
-                articulos: [
-                    { codigo: 'ART-01', descripcion: 'Cuaderno Universitario A4', precio_costo: 800, precio_venta: 1500, stock: 100, punto_reorden: 20 },
-                    { codigo: 'ART-02', descripcion: 'Abrochadora Pesada Oficina', precio_costo: 3500, precio_venta: 6000, stock: 15, punto_reorden: 5 }
-                ],
-                ventas: [],
-                compras: [],
-                libro_diario: []
-            },
-            nuevoCliente: { razon_social: '', cuit: '', condicion_iva: 'RI' },
-            nuevoProveedor: { razon_social: '', cuit: '', condicion_iva: 'RI' },
-            nuevoArticulo: { codigo: '', descripcion: '', precio_costo: 0, precio_venta: 0, stock: 0, punto_reorden: 5 },
-            nuevaVenta: { cliente_id: 1, tipo_doc: 'FACTURA', fecha: new Date().toISOString().substr(0,10), items: [] },
-            itemTemporal: { articulo_id: 'ART-01', cantidad: 1, precio_unitario: 1500 },
-            nuevaCompra: { proveedor_id: 1, numero: '', fecha: new Date().toISOString().substr(0,10), items: [] },
-            itemCompraTemp: { articulo_id: 'ART-01', cantidad: 1, precio_costo: 800 }
-        }
-    },
-    computed: {
-        tipoComprobanteCalculado() {
-            if (this.nuevaVenta.tipo_doc === 'PRESUPUESTO') return 'X';
-            const cliente = this.db.clientes.find(c => c.id === this.nuevaVenta.cliente_id);
-            if (!cliente) return 'B';
-            if (this.db.empresa.condicion_iva === 'MONO') return 'C';
-            return cliente.condicion_iva === 'RI' ? 'A' : 'B';
-        },
-        totalesVenta() {
-            const totalBruto = this.nuevaVenta.items.reduce((acc, i) => acc + (i.cantidad * i.precio_unitario), 0);
-            if (this.tipoComprobanteCalculado === 'A') {
-                const neto = totalBruto / 1.21;
-                return { neto, iva: totalBruto - neto, total: totalBruto };
-            }
-            return { neto: totalBruto, iva: 0, total: totalBruto };
-        },
-        totalCompra() {
-            return this.nuevaCompra.items.reduce((acc, i) => acc + (i.cantidad * i.precio_costo), 0);
-        }
-    },
-    mounted() {
-        this.loadLocalData();
+    if(nombre === "registro") {
+        document.getElementById("pantallaRegistro").classList.add("activa");
+        document.getElementById("menuRegistro").classList.add("activo");
+    }
+    if(nombre === "qr") {
+        document.getElementById("pantallaQR").classList.add("activa");
+        document.getElementById("menuQR").classList.add("activo");
+        detenerCamara();
+    }
+    if(nombre === "funcionamiento") {
+        document.getElementById("pantallaFuncionamiento").classList.add("activa");
+        document.getElementById("menuFuncionamiento").classList.add("activo");
+        detenerCamara();
+    }
+}
 
-        // Listener persistente para autenticación
-        auth.onAuthStateChanged(u => {
-            if (u) {
-                this.user = { 
-                    displayName: u.displayName || u.email.split('@')[0], 
-                    email: u.email 
-                };
-            } else {
-                this.user = null;
-            }
-        });
-    },
-    methods: {
-        login() {
-            auth.signInWithPopup(googleProvider)
-                .then((result) => {
-                    const u = result.user;
-                    this.user = { 
-                        displayName: u.displayName || u.email.split('@')[0], 
-                        email: u.email 
-                    };
-                })
-                .catch((err) => {
-                    console.error("Error Autenticación:", err);
-                    
-                    if (err.code === 'auth/popup-blocked') {
-                        alert("El navegador bloqueó la ventana de inicio de sesión. Permite las ventanas emergentes (popups) para ingresar con Google.");
-                        return;
-                    }
+function obtenerRegistros() {
+    return JSON.parse(localStorage.getItem("db_netbooks")) || [];
+}
 
-                    if (err.code === 'auth/unauthorized-domain') {
-                        alert("Dominio no autorizado en Firebase. Añade este dominio en la consola de Firebase en Auth > Settings > Authorized Domains.");
-                        return;
-                    }
+function cambiarMovimiento() {
+    const movimiento = document.querySelector('input[name="movimiento"]:checked').value;
+    const recepcion = movimiento === "Entrada (Recepción)";
 
-                    alert("No se pudo iniciar sesión con Google (" + err.message + "). Iniciando en modo local.");
-                    this.user = { displayName: 'Usuario de Prueba', email: 'usuario@cet3.edu.ar' };
-                });
-        },
-        logout() { 
-            auth.signOut().then(() => {
-                this.user = null;
-            }); 
-        },
-        formatNum(v) { return Number(v || 0).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); },
-        
-        // Métodos Clientes y Proveedores
-        agregarCliente() {
-            if (!this.nuevoCliente.razon_social || !this.nuevoCliente.cuit) return alert('Complete los datos del cliente');
-            const nuevoId = this.db.clientes.length ? Math.max(...this.db.clientes.map(c => c.id)) + 1 : 1;
-            this.db.clientes.push({ id: nuevoId, ...this.nuevoCliente });
-            this.nuevoCliente = { razon_social: '', cuit: '', condicion_iva: 'RI' };
-            this.saveLocalData();
-        },
-        eliminarCliente(id) {
-            this.db.clientes = this.db.clientes.filter(c => c.id !== id);
-            this.saveLocalData();
-        },
-        agregarProveedor() {
-            if (!this.nuevoProveedor.razon_social || !this.nuevoProveedor.cuit) return alert('Complete los datos del proveedor');
-            const nuevoId = this.db.proveedores.length ? Math.max(...this.db.proveedores.map(p => p.id)) + 1 : 1;
-            this.db.proveedores.push({ id: nuevoId, ...this.nuevoProveedor });
-            this.nuevoProveedor = { razon_social: '', cuit: '', condicion_iva: 'RI' };
-            this.saveLocalData();
-        },
-        eliminarProveedor(id) {
-            this.db.proveedores = this.db.proveedores.filter(p => p.id !== id);
-            this.saveLocalData();
-        },
+    document.getElementById("datosEntrega").style.display = recepcion ? "none" : "block";
+    document.getElementById("estadoEntrada").style.display = recepcion ? "block" : "none";
+    document.getElementById("estudiante").required = !recepcion;
+    document.getElementById("profesor").required = !recepcion;
 
-        // Métodos Stock
-        guardarArticulo() {
-            if (!this.nuevoArticulo.codigo || !this.nuevoArticulo.descripcion) return alert('Complete código y descripción');
-            this.db.articulos.push({ ...this.nuevoArticulo });
-            this.nuevoArticulo = { codigo: '', descripcion: '', precio_costo: 0, precio_venta: 0, stock: 0, punto_reorden: 5 };
-            this.modalArticulo = false;
-            this.saveLocalData();
-        },
+    lista = [];
+    actualizarLista();
+}
 
-        // Métodos Compras
-        actualizarCostoTemp() {
-            const art = this.db.articulos.find(a => a.codigo === this.itemCompraTemp.articulo_id);
-            if (art) this.itemCompraTemp.precio_costo = art.precio_costo;
-        },
-        agregarItemCompra() {
-            const art = this.db.articulos.find(a => a.codigo === this.itemCompraTemp.articulo_id);
-            if (!art) return;
-            this.nuevaCompra.items.push({
-                codigo: art.codigo, descripcion: art.descripcion,
-                cantidad: this.itemCompraTemp.cantidad, precio_costo: this.itemCompraTemp.precio_costo
-            });
-        },
-        registrarCompra() {
-            if (!this.nuevaCompra.items.length) return alert('Agregue al menos un producto a la compra.');
-            const compra = {
-                id: Date.now(),
-                numero: this.nuevaCompra.numero || 'REC-' + Date.now().toString().slice(-4),
-                fecha: this.nuevaCompra.fecha,
-                proveedor_id: this.nuevaCompra.proveedor_id,
-                items: [...this.nuevaCompra.items],
-                total: this.totalCompra
-            };
+function actualizarCurso() {
+    const ciclo = document.querySelector('input[name="ciclo"]:checked').value;
+    const grado = document.querySelector('input[name="grado"]:checked').value;
+    const division = document.querySelector('input[name="division"]:checked').value;
+    document.getElementById("cursoSeleccionado").innerText = ciclo + " · " + grado + "° · " + division + "° División";
+}
 
-            // Sumar Stock
-            this.nuevaCompra.items.forEach(it => {
-                const a = this.db.articulos.find(x => x.codigo === it.codigo);
-                if (a) {
-                    a.stock += it.cantidad;
-                    a.precio_costo = it.precio_costo;
-                }
-            });
-
-            // Asiento Contable
-            this.db.libro_diario.push({
-                asiento_id: this.db.libro_diario.length + 1,
-                fecha: compra.fecha,
-                concepto: `Compra de Mercadería s/ Fact. ${compra.numero}`,
-                movimientos: [
-                    { cuenta: 'Mercaderías / Inventario', debe: compra.total, haber: 0 },
-                    { cuenta: 'Caja / Proveedores', debe: 0, haber: compra.total }
-                ]
-            });
-
-            this.db.compras.unshift(compra);
-            this.nuevaCompra.items = [];
-            alert('Compra registrada y stock actualizado.');
-            this.saveLocalData();
-        },
-
-        // Métodos Ventas
-        actualizarPrecioTemp() {
-            const art = this.db.articulos.find(a => a.codigo === this.itemTemporal.articulo_id);
-            if (art) this.itemTemporal.precio_unitario = art.precio_venta;
-        },
-        agregarItem() {
-            const art = this.db.articulos.find(a => a.codigo === this.itemTemporal.articulo_id);
-            if (!art) return;
-            this.nuevaVenta.items.push({
-                codigo: art.codigo, descripcion: art.descripcion,
-                cantidad: this.itemTemporal.cantidad, precio_unitario: this.itemTemporal.precio_unitario
-            });
-        },
-        emitirVenta() {
-            if (!this.nuevaVenta.items.length) return alert('Agregue al menos un producto.');
-            const letra = this.tipoComprobanteCalculado;
-            const numero = String(this.db.ventas.length + 1).padStart(8, '0');
-            
-            const venta = {
-                id: Date.now(),
-                numero: `${String(this.db.empresa.pto_venta).padStart(4,'0')}-${numero}`,
-                letra, tipo_doc: this.nuevaVenta.tipo_doc,
-                fecha: this.nuevaVenta.fecha, cliente_id: this.nuevaVenta.cliente_id,
-                items: [...this.nuevaVenta.items],
-                subtotal: this.totalesVenta.neto, iva: this.totalesVenta.iva, total: this.totalesVenta.total,
-                cae: Math.floor(10000000000000 + Math.random() * 90000000000000),
-                cae_vencimiento: new Date(Date.now() + 864000000).toISOString().substr(0,10)
-            };
-
-            this.nuevaVenta.items.forEach(it => {
-                const a = this.db.articulos.find(x => x.codigo === it.codigo);
-                if (a) a.stock -= it.cantidad;
-            });
-
-            this.db.libro_diario.push({
-                asiento_id: this.db.libro_diario.length + 1,
-                fecha: venta.fecha, concepto: `Venta s/ Factura ${venta.letra} N° ${venta.numero}`,
-                movimientos: [
-                    { cuenta: 'Caja / Cuentas a Cobrabar', debe: venta.total, haber: 0 },
-                    { cuenta: 'Ventas de Mercadería', debe: 0, haber: venta.subtotal },
-                    ...(venta.iva > 0 ? [{ cuenta: 'IVA Débito Fiscal', debe: 0, haber: venta.iva }] : [])
-                ]
-            });
-
-            this.db.ventas.unshift(venta);
-            this.nuevaVenta.items = [];
-            alert(`Comprobante ${letra} N° ${venta.numero} emitido exitosamente.`);
-            this.saveLocalData();
-        },
-        imprimirComprobante(v) {
-            this.facturaImpresion = v;
-            setTimeout(() => window.print(), 300);
-        },
-        getCliente(id) { return this.db.clientes.find(c => c.id === id) || {}; },
-        getClienteNombre(id) { return this.getCliente(id).razon_social || '-'; },
-        getProveedor(id) { return this.db.proveedores.find(p => p.id === id) || {}; },
-        getProveedorNombre(id) { return this.getProveedor(id).razon_social || '-'; },
-        getCodigoComprobante(l) { return { 'A': '001', 'B': '006', 'C': '011', 'X': '000' }[l] || '000'; },
-        saveLocalData() { localStorage.setItem('empresa_tango_cet3', JSON.stringify(this.db)); },
-        loadLocalData() {
-            const data = localStorage.getItem('empresa_tango_cet3');
-            if (data) {
-                const parsed = JSON.parse(data);
-                if (!parsed.proveedores) parsed.proveedores = [];
-                if (!parsed.compras) parsed.compras = [];
-                this.db = parsed;
-            }
-        },
-        saveToDrive() {
-            this.syncing = true;
-            this.saveLocalData();
-            setTimeout(() => { this.syncing = false; alert('Datos guardados localmente en el navegador.'); }, 800);
+function buscarNetbook(codigo) {
+    const registros = obtenerRegistros();
+    for(let i = registros.length - 1; i >= 0; i--) {
+        if(String(registros[i].numNetbook).toUpperCase() === codigo.toUpperCase()) {
+            return { registro: registros[i], indice: i };
         }
     }
-}).mount('#app');
+    return null;
+}
+
+function agregarNetbook(codigo) {
+    codigo = codigo.trim();
+    if(!codigo) return false;
+
+    const movimiento = document.querySelector('input[name="movimiento"]:checked').value;
+    const encontrado = buscarNetbook(codigo);
+
+    if(movimiento === "Entrada (Recepción)") {
+        if(!encontrado) {
+            mostrarMensaje("⚠️ " + codigo + " no está registrada.", true);
+            return false;
+        }
+        if(encontrado.registro.estado === "RECIBIDA") {
+            mostrarMensaje("⚠️ " + codigo + " ya está recibida.", true);
+            return false;
+        }
+    }
+
+    if(movimiento === "Salida (Entrega)" && encontrado && encontrado.registro.estado === "ENTREGADA") {
+        mostrarMensaje("⚠️ " + codigo + " ya está entregada.", true);
+        return false;
+    }
+
+    if(lista.some(x => x.toUpperCase() === codigo.toUpperCase())) {
+        mostrarMensaje("⚠️ El código ya está en la lista.", true);
+        return false;
+    }
+
+    lista.push(codigo);
+    actualizarLista();
+    mostrarMensaje("✓ " + codigo + " agregado.", false);
+    return true;
+}
+
+function agregarManual() {
+    const campo = document.getElementById("codigoManual");
+    if(agregarNetbook(campo.value)) {
+        campo.value = "";
+        campo.focus();
+    }
+}
+
+document.getElementById("codigoManual").addEventListener("keydown", function(e) {
+    if(e.key === "Enter") {
+        e.preventDefault();
+        agregarManual();
+    }
+});
+
+function actualizarLista() {
+    const ul = document.getElementById("listaNetbooks");
+    document.getElementById("contador").innerText = lista.length;
+    ul.innerHTML = "";
+
+    if(lista.length === 0) {
+        ul.innerHTML = "<li>Todavía no hay netbooks.</li>";
+        return;
+    }
+
+    lista.forEach((codigo, indice) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span>${escapeHTML(codigo)}</span><button type="button" class="btn btn-quitar" onclick="quitar(${indice})">✕</button>`;
+        ul.appendChild(li);
+    });
+}
+
+function quitar(indice) {
+    lista.splice(indice, 1);
+    actualizarLista();
+}
+
+function iniciarCamara() {
+    document.getElementById("reader").style.display = "block";
+    document.getElementById("btnDetener").style.display = "block";
+    if(scanner) return;
+
+    scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    scanner.render(function(decodedText) { agregarNetbook(decodedText); }, function(error) {});
+}
+
+function detenerCamara() {
+    if(scanner) {
+        scanner.clear().catch(function(error) { console.log(error); });
+        scanner = null;
+    }
+    document.getElementById("reader").style.display = "none";
+    document.getElementById("btnDetener").style.display = "none";
+}
+
+document.getElementById("registroForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    if(lista.length === 0) {
+        alert("Agregá al menos una netbook.");
+        return;
+    }
+
+    const ahora = new Date();
+    const fechaHora = ahora.toLocaleDateString("es-AR") + " " + ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+    const movimiento = document.querySelector('input[name="movimiento"]:checked').value;
+    let registros = obtenerRegistros();
+    let nuevosRegistros = [];
+
+    if(movimiento === "Entrada (Recepción)") {
+        lista.forEach(codigo => {
+            const encontrado = buscarNetbook(codigo);
+            if(encontrado) {
+                registros[encontrado.indice].estado = "RECIBIDA";
+                registros[encontrado.indice].movimiento = "Entrada (Recepción)";
+                registros[encontrado.indice].fechaHora = fechaHora;
+                nuevosRegistros.push(registros[encontrado.indice]);
+            }
+        });
+    } else {
+        const estudiante = document.getElementById("estudiante").value.trim();
+        const profesor = document.getElementById("profesor").value.trim();
+        const ciclo = document.querySelector('input[name="ciclo"]:checked').value;
+        const grado = document.querySelector('input[name="grado"]:checked').value;
+        const division = document.querySelector('input[name="division"]:checked').value;
+        const curso = ciclo + " · " + grado + "° · " + division + "° División";
+
+        lista.forEach(codigo => {
+            const reg = {
+                fechaHora: fechaHora,
+                numNetbook: codigo,
+                movimiento: "Salida (Entrega)",
+                estudiante: estudiante,
+                profesor: profesor,
+                curso: curso,
+                estado: "ENTREGADA"
+            };
+            registros.push(reg);
+            nuevosRegistros.push(reg);
+        });
+    }
+
+    localStorage.setItem("db_netbooks", JSON.stringify(registros));
+    
+    // GUARDADO AUTOMÁTICO EN LA NUBE (GOOGLE SHEETS)
+    guardarEnNube(nuevosRegistros);
+
+    lista = [];
+    actualizarLista();
+    document.getElementById("registroForm").reset();
+    document.querySelector('input[name="movimiento"][value="Salida (Entrega)"]').checked = true;
+
+    cambiarMovimiento();
+    actualizarCurso();
+    cargarTabla();
+    detenerCamara();
+
+    alert("✓ Operación registrada correctamente.");
+});
+
+function guardarEnNube(registrosNuevos) {
+    if(!URL_SCRIPT || URL_SCRIPT === "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI") return;
+    fetch(URL_SCRIPT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "guardar", registros: registrosNuevos })
+    }).catch(err => console.error("Error respaldando en la nube:", err));
+}
+
+function sincronizarConNube() {
+    if(!URL_SCRIPT || URL_SCRIPT === "https://script.google.com/macros/s/AKfycbzelhn5zTgtH-rGgfKZdN03Bs2hCNJ1f99A-IC3pgfow8iLUNFH7NK9oazLOoKgZIRj/exec") {
+        alert("Configurá la URL de Apps Script primero.");
+        return;
+    }
+    
+    mostrarMensaje("🔄 Sincronizando datos...", false);
+    fetch(URL_SCRIPT)
+        .then(res => res.json())
+        .then(data => {
+            if(Array.isArray(data)) {
+                localStorage.setItem("db_netbooks", JSON.stringify(data));
+                cargarTabla();
+                alert("✓ Registros recuperados con éxito desde la nube.");
+            }
+        })
+        .catch(err => {
+            console.error("Error al recuperar datos:", err);
+            alert("Error al intentar recuperar los datos de la nube.");
+        });
+}
+
+function cargarTabla() {
+    const registros = obtenerRegistros();
+    const busqueda = document.getElementById("buscar").value.toLowerCase();
+    const tabla = document.getElementById("tablaRegistros");
+    tabla.innerHTML = "";
+
+    let entregadas = 0;
+    let recibidas = 0;
+
+    registros.forEach(r => {
+        if(r.estado === "ENTREGADA") entregadas++;
+        else recibidas++;
+    });
+
+    document.getElementById("total").innerText = registros.length;
+    document.getElementById("totalEntregadas").innerText = entregadas;
+    document.getElementById("totalRecibidas").innerText = recibidas;
+
+    registros.slice().reverse().forEach(r => {
+        if(filtro === "entregadas" && r.estado !== "ENTREGADA") return;
+        if(filtro === "recibidas" && r.estado !== "RECIBIDA") return;
+
+        const texto = (r.numNetbook + " " + (r.estudiante || "") + " " + (r.profesor || "") + " " + (r.curso || "")).toLowerCase();
+        if(busqueda && !texto.includes(busqueda)) return;
+
+        const recibida = r.estado === "RECIBIDA";
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+            <td>${escapeHTML(r.fechaHora)}</td>
+            <td>
+                <span class="${recibida ? "codigo-recibido" : "codigo-entregado"} netbook-click" title="Hacer clic para cambiar el estado" onclick="cambiarEstado('${escapeAtributo(r.numNetbook)}')">
+                    ${escapeHTML(r.numNetbook)}
+                </span>
+            </td>
+            <td><span class="${recibida ? "estado-recibida" : "estado-entregada"}">${recibida ? "🔵 RECIBIDA" : "🔴 ENTREGADA"}</span></td>
+            <td>${escapeHTML(r.estudiante || "—")}</td>
+            <td>${escapeHTML(r.profesor || "—")}</td>
+            <td>${escapeHTML(r.curso || "—")}</td>
+        `;
+        tabla.appendChild(fila);
+    });
+}
+
+function cambiarEstado(codigo) {
+    const encontrado = buscarNetbook(codigo);
+    if(!encontrado) return;
+
+    const nuevo = encontrado.registro.estado === "ENTREGADA" ? "RECIBIDA" : "ENTREGADA";
+    if(!confirm("¿Cambiar " + codigo + " a " + nuevo + "?")) return;
+
+    let registros = obtenerRegistros();
+    registros[encontrado.indice].estado = nuevo;
+    registros[encontrado.indice].movimiento = nuevo === "RECIBIDA" ? "Entrada (Recepción)" : "Salida (Entrega)";
+
+    const ahora = new Date();
+    registros[encontrado.indice].fechaHora = ahora.toLocaleDateString("es-AR") + " " + ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+
+    localStorage.setItem("db_netbooks", JSON.stringify(registros));
+    guardarEnNube([registros[encontrado.indice]]);
+    cargarTabla();
+}
+
+function cambiarFiltro(nuevo) {
+    filtro = nuevo;
+    document.querySelectorAll(".btn-filtro").forEach(b => b.classList.remove("activo"));
+    if(nuevo === "todas") document.getElementById("filtroTodas").classList.add("activo");
+    if(nuevo === "entregadas") document.getElementById("filtroEntregadas").classList.add("activo");
+    if(nuevo === "recibidas") document.getElementById("filtroRecibidas").classList.add("activo");
+    cargarTabla();
+}
+
+function mostrarMensaje(texto, error) {
+    const m = document.getElementById("mensaje");
+    m.style.display = "block";
+    m.innerText = texto;
+    m.style.background = error ? "#ffebee" : "#e3f2fd";
+    m.style.color = error ? "#c62828" : "#1565c0";
+    setTimeout(() => { m.style.display = "none"; }, 2500);
+}
+
+function generarQR() {
+    const codigo = document.getElementById("inputQR").value.trim();
+    if(!codigo) { alert("Ingresá el código."); return; }
+
+    document.getElementById("qrcode").innerHTML = "";
+    new QRCode(document.getElementById("qrcode"), { text: codigo, width: 180, height: 180 });
+    document.getElementById("labelCode").innerText = codigo;
+}
+
+function imprimirQR() {
+    const codigo = document.getElementById("inputQR").value.trim();
+    if(!codigo || document.getElementById("qrcode").innerHTML === "") {
+        alert("Primero generá el QR.");
+        return;
+    }
+    window.print();
+}
+
+function exportarCSV() {
+    const registros = obtenerRegistros();
+    if(registros.length === 0) { alert("No hay registros."); return; }
+
+    let csv = "\uFEFFFecha y Hora;N° Netbook;Estado;Estudiante;Profesor;Curso/División\n";
+    registros.forEach(r => {
+        csv += `"${csvEscape(r.fechaHora)}";"${csvEscape(r.numNetbook)}";"${csvEscape(r.estado)}";"${csvEscape(r.estudiante || "")}";"${csvEscape(r.profesor || "")}";"${csvEscape(r.curso || "")}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const fecha = new Date().toLocaleDateString("es-AR").replaceAll("/", "-");
+
+    a.href = url;
+    a.download = "Control_Netbooks_CET3_" + fecha + ".csv";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function csvEscape(text) { return String(text).replaceAll('"', '""'); }
+
+function borrarDatos() {
+    if(confirm("⚠️ ¿Seguro que querés borrar el historial LOCAL de esta computadora? (Los datos seguirán en la nube)")) {
+        localStorage.removeItem("db_netbooks");
+        cargarTabla();
+    }
+}
+
+function escapeHTML(texto) {
+    const div = document.createElement("div");
+    div.textContent = texto;
+    return div.innerHTML;
+}
+
+function escapeAtributo(texto) {
+    return String(texto).replaceAll("\\", "\\\\").replaceAll("'", "\\'");
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    cargarTabla();
+    actualizarCurso();
+    cambiarMovimiento();
+});
 </script>
+
 </body>
 </html>
