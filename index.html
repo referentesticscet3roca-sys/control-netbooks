@@ -4,13 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Control de Netbooks - CET 3</title>
+<title>Sistema de Control de Insumos, Netbooks y QR - CET 3</title>
 
+<!-- Script e Iconos Externos -->
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    brand: {
+                        50: '#eef2ff',
+                        100: '#e0e7ff',
+                        500: '#6366f1',
+                        600: '#4f46e5',
+                        700: '#4338ca',
+                        900: '#312e81',
+                    }
+                }
+            }
+        }
+    }
+</script>
 
 <style>
-
 * {
     box-sizing: border-box;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -50,16 +72,17 @@ body {
 .titulo h1 {
     margin: 0;
     color: #1769aa;
-    font-size: 26px;
+    font-size: 24px;
 }
 
 .titulo p {
     margin: 2px 0 0;
     color: #607d8b;
+    font-size: 14px;
 }
 
 #reloj {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     color: #455a64;
     text-align: right;
@@ -71,14 +94,15 @@ body {
     width: 100%;
     padding: 0 15px;
     gap: 4px;
+    flex-wrap: wrap;
 }
 
 .menu button {
     border: none;
-    padding: 13px 25px;
+    padding: 12px 20px;
     background: #e4ebf0;
     color: #455a64;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     border-radius: 8px 8px 0 0;
@@ -159,15 +183,16 @@ h2 {
     align-items: center;
     gap: 10px;
     margin-bottom: 12px;
+    flex-wrap: wrap;
 }
 
-.busqueda { flex: 1; }
+.busqueda { flex: 1; min-width: 200px; }
 .busqueda input {
     width: 100%;
     padding: 11px;
     border: 1px solid #cbd5dc;
     border-radius: 7px;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .btn {
@@ -182,10 +207,9 @@ h2 {
 .btn-filtro { background: #e8edf1; color: #455a64; }
 .btn-filtro.activo { background: #1769aa; color: white; }
 .btn-csv { background: #2878d7; color: white; }
-.btn-sync { background: #2e7d32; color: white; }
 .btn-danger { background: #c62828; color: white; }
 
-/* TABLA */
+/* TABLA Y ORDENAMIENTO */
 .tabla-contenedor { width: 100%; overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; table-layout: auto; }
 th {
@@ -195,7 +219,20 @@ th {
     text-align: left;
     font-size: 14px;
     white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
 }
+
+th:hover {
+    background: #12558a;
+}
+
+th::after {
+    content: " ↕";
+    font-size: 11px;
+    opacity: 0.6;
+}
+
 td {
     border-bottom: 1px solid #e0e6eb;
     padding: 10px 9px;
@@ -217,11 +254,17 @@ tr:hover { background: #eef6fd; }
 .netbook-click { cursor: pointer; user-select: text; }
 .netbook-click:hover { opacity: .65; }
 
-/* REGISTRO */
+/* REGISTRO GRID */
 .registro-grid {
     display: grid;
     grid-template-columns: 420px 1fr;
     gap: 20px;
+}
+
+@media (max-width: 900px) {
+    .registro-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .movimientos {
@@ -264,7 +307,7 @@ label.titulo-campo {
     font-size: 14px;
 }
 
-input[type="text"] {
+input[type="text"], input[type="date"], input[type="time"] {
     width: 100%;
     padding: 11px;
     border: 1px solid #cbd5dc;
@@ -297,7 +340,7 @@ input[type="text"] {
 .btn-agregar { background: #1769aa; color: white; }
 
 .selector-titulo { display: block; margin: 12px 0 6px; font-weight: bold; }
-.selector { display: flex; gap: 6px; }
+.selector { display: flex; gap: 6px; flex-wrap: wrap; }
 .selector label { margin: 0; }
 .selector input { display: none; }
 .selector span {
@@ -344,7 +387,7 @@ input[type="text"] {
 }
 
 .btn-quitar { background: #78909c; color: white; padding: 5px 9px; }
-.btn-guardar { width: 100%; margin-top: 10px; background: #1769aa; color: white; font-size: 16px; }
+.btn-guardar { width: 100%; margin-top: 15px; background: #1769aa; color: white; font-size: 16px; }
 
 #mensaje {
     display: none;
@@ -354,7 +397,7 @@ input[type="text"] {
     font-weight: bold;
 }
 
-/* GENERADOR QR */
+/* ETIQUETA QR */
 .qr-contenedor { max-width: 650px; margin: 0 auto; }
 .qr-form { display: flex; gap: 10px; }
 .qr-form input { flex: 1; }
@@ -386,52 +429,76 @@ input[type="text"] {
 
 /* FUNCIONAMIENTO */
 .funcionamiento { max-width: 1000px; margin: auto; }
-.funcion-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.funcion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
 .funcion { padding: 18px; border-radius: 9px; border: 1px solid #dce5eb; background: #f8fafb; }
 .funcion h3 { color: #1769aa; margin-top: 0; }
 .funcion p { line-height: 1.5; }
 
+/* DUAL INPUTS (Fecha / Hora) */
+.campo-doble {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
 @media print {
-    @page { margin: 0; }
     body * { visibility: hidden; }
-    #etiqueta, #etiqueta * { visibility: visible; }
+    #etiqueta, #etiqueta *, #printable-poster, #printable-poster * { visibility: visible; }
     #etiqueta {
         position: absolute;
         left: 0; top: 0; margin: 0;
         border: 1px solid #000;
         width: 60mm; min-height: 70mm;
     }
+    #printable-poster {
+        position: absolute;
+        left: 0; top: 0; width: 100%; height: 100%;
+        background: white !important;
+        color: black !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 2rem !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    .no-print { display: none !important; }
 }
 </style>
 </head>
 
 <body>
 
-<header class="header">
+<header class="header no-print">
     <div class="header-inner">
         <div class="titulo">
-            <div class="titulo-icono">💻</div>
+            <div class="titulo-icono">🏫</div>
             <div>
-                <h1>CONTROL DE NETBOOKS</h1>
-                <p>CET 3 · Registro de entrega y recepción</p>
+                <h1>SISTEMA DE CONTROL DE INSUMOS Y NETBOOKS</h1>
+                <p>CET 3 · Gestión Local</p>
             </div>
         </div>
         <div id="reloj">Cargando...</div>
     </div>
 
     <nav class="menu">
-        <button id="menuRegistro" class="activo" onclick="mostrarPantalla('registro')">📋 REGISTROS</button>
-        <button id="menuQR" onclick="mostrarPantalla('qr')">🔲 GENERAR QR</button>
+        <button id="menuNetbooks" class="activo" onclick="mostrarPantalla('netbooks')">💻 NETBOOKS</button>
+        <button id="menuResmas" onclick="mostrarPantalla('resmas')">📄 RESMAS DE HOJAS</button>
+        <button id="menuToner" onclick="mostrarPantalla('toner')">🖨️ TONER</button>
+        <button id="menuQR" onclick="mostrarPantalla('qr')">🏷️ ETIQUETA QR</button>
+        <button id="menuQRTemporal" onclick="mostrarPantalla('qrTemporal')">⏱️ QR TEMPORAL</button>
         <button id="menuFuncionamiento" onclick="mostrarPantalla('funcionamiento')">ℹ️ FUNCIONAMIENTO</button>
     </nav>
 </header>
 
-<section id="pantallaRegistro" class="pantalla activa">
+<!-- PANTALLA NETBOOKS -->
+<section id="pantallaNetbooks" class="pantalla activa">
     <div class="contenido">
         <div class="registro-grid">
 
             <div class="card">
-                <h2>📋 Registrar movimiento</h2>
+                <h2>📋 Registrar Netbooks</h2>
                 <div class="movimientos">
                     <label>
                         <input type="radio" name="movimiento" value="Salida (Entrega)" checked onchange="cambiarMovimiento()">
@@ -525,7 +592,7 @@ input[type="text"] {
 
                 <div class="controles">
                     <div class="busqueda">
-                        <input type="text" id="buscar" placeholder="🔎 Buscar netbook, estudiante, profesor o curso..." oninput="cargarTabla()">
+                        <input type="text" id="buscarNetbookInput" placeholder="🔎 Buscar por netbook, estudiante, profesor o curso..." oninput="cargarTablaNetbooks()">
                     </div>
                     <button id="filtroTodas" class="btn btn-filtro activo" onclick="cambiarFiltro('todas')">TODAS</button>
                     <button id="filtroEntregadas" class="btn btn-filtro" onclick="cambiarFiltro('entregadas')">🔴 ENTREGADAS</button>
@@ -533,21 +600,20 @@ input[type="text"] {
                 </div>
 
                 <div class="controles" style="justify-content:flex-end;">
-                    <button class="btn btn-sync" onclick="sincronizarConNube()">🔄 RESTAURAR DE LA NUBE</button>
-                    <button class="btn btn-csv" onclick="exportarCSV()">📥 DESCARGAR CSV</button>
-                    <button class="btn btn-danger" onclick="borrarDatos()">🗑️ BORRAR HISTORIAL LOCAL</button>
+                    <button class="btn btn-csv" onclick="exportarCSVNetbooks()">📥 DESCARGAR CSV</button>
+                    <button class="btn btn-danger" onclick="borrarDatosNetbooks()">🗑️ BORRAR HISTORIAL LOCAL</button>
                 </div>
 
                 <div class="tabla-contenedor">
                     <table>
                         <thead>
                             <tr>
-                                <th>FECHA / HORA</th>
-                                <th>NETBOOK</th>
-                                <th>ESTADO</th>
-                                <th>ESTUDIANTE</th>
-                                <th>PROFESOR</th>
-                                <th>CURSO / DIVISIÓN</th>
+                                <th onclick="ordenarTabla('netbooks', 'fechaHora')">FECHA / HORA</th>
+                                <th onclick="ordenarTabla('netbooks', 'numNetbook')">NETBOOK</th>
+                                <th onclick="ordenarTabla('netbooks', 'estado')">ESTADO</th>
+                                <th onclick="ordenarTabla('netbooks', 'estudiante')">ESTUDIANTE</th>
+                                <th onclick="ordenarTabla('netbooks', 'profesor')">PROFESOR</th>
+                                <th onclick="ordenarTabla('netbooks', 'curso')">CURSO / DIVISIÓN</th>
                             </tr>
                         </thead>
                         <tbody id="tablaRegistros"></tbody>
@@ -559,13 +625,134 @@ input[type="text"] {
     </div>
 </section>
 
+<!-- PANTALLA RESMAS -->
+<section id="pantallaResmas" class="pantalla">
+    <div class="contenido">
+        <div class="registro-grid">
+            <div class="card">
+                <h2>📄 Control de Resmas de Hojas</h2>
+                <form id="formResmas" onsubmit="guardarResma(event)">
+                    <label class="titulo-campo">📦 Tipo / Tamaño de Resma *</label>
+                    <input type="text" id="resmaTipo" placeholder="Ej: A4 75g, Oficio, Carta, Boreal A4..." required>
+
+                    <label class="titulo-campo">👤 Quién Retira *</label>
+                    <input type="text" id="resmaRetira" placeholder="Nombre y apellido o docente" required>
+
+                    <label class="titulo-campo">📍 Lugar de Destino / Uso *</label>
+                    <input type="text" id="resmaLugar" placeholder="Ej: Dirección, Aula 4, Preceptoría..." required>
+
+                    <div class="campo-doble">
+                        <div>
+                            <label class="titulo-campo">📅 Fecha *</label>
+                            <input type="date" id="resmaFecha" required>
+                        </div>
+                        <div>
+                            <label class="titulo-campo">🕐 Hora *</label>
+                            <input type="time" id="resmaHora" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-guardar">💾 REGISTRAR RETIRO DE RESMA</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>📊 Historial de Salida de Resmas</h2>
+                <div class="controles">
+                    <div class="busqueda">
+                        <input type="text" id="buscarResmaInput" placeholder="🔎 Buscar por tipo, persona o destino..." oninput="cargarTablaResmas()">
+                    </div>
+                    <button class="btn btn-csv" onclick="exportarCSVResmas()">📥 DESCARGAR CSV</button>
+                    <button class="btn btn-danger" onclick="borrarDatosResmas()">🗑️ BORRAR HISTORIAL</button>
+                </div>
+
+                <div class="tabla-contenedor">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="ordenarTabla('resmas', 'fecha')">FECHA</th>
+                                <th onclick="ordenarTabla('resmas', 'hora')">HORA</th>
+                                <th onclick="ordenarTabla('resmas', 'tipo')">TIPO DE RESMA</th>
+                                <th onclick="ordenarTabla('resmas', 'retira')">QUIÉN RETIRA</th>
+                                <th onclick="ordenarTabla('resmas', 'lugar')">DESTINO / USO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaResmas"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PANTALLA TONER -->
+<section id="pantallaToner" class="pantalla">
+    <div class="contenido">
+        <div class="registro-grid">
+            <div class="card">
+                <h2>🖨️ Control de Toner</h2>
+                <form id="formToner" onsubmit="guardarToner(event)">
+                    <label class="titulo-campo">🖨️ Tipo de Impresora / Modelo Toner *</label>
+                    <input type="text" id="tonerTipo" placeholder="Ej: HP LaserJet P1102w / Toner 85A..." required>
+
+                    <label class="titulo-campo">👤 Quién Retira *</label>
+                    <input type="text" id="tonerRetira" placeholder="Nombre y apellido" required>
+
+                    <label class="titulo-campo">📍 Lugar de Destino *</label>
+                    <input type="text" id="tonerLugar" placeholder="Ej: Secretaría, Sala de Profesores..." required>
+
+                    <div class="campo-doble">
+                        <div>
+                            <label class="titulo-campo">📅 Fecha *</label>
+                            <input type="date" id="tonerFecha" required>
+                        </div>
+                        <div>
+                            <label class="titulo-campo">🕐 Hora *</label>
+                            <input type="time" id="tonerHora" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-guardar">💾 REGISTRAR SALIDA DE TONER</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>📊 Historial de Entrega de Toners</h2>
+                <div class="controles">
+                    <div class="busqueda">
+                        <input type="text" id="buscarTonerInput" placeholder="🔎 Buscar por impresora, persona o destino..." oninput="cargarTablaToner()">
+                    </div>
+                    <button class="btn btn-csv" onclick="exportarCSVToner()">📥 DESCARGAR CSV</button>
+                    <button class="btn btn-danger" onclick="borrarDatosToner()">🗑️ BORRAR HISTORIAL</button>
+                </div>
+
+                <div class="tabla-contenedor">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="ordenarTabla('toner', 'fecha')">FECHA</th>
+                                <th onclick="ordenarTabla('toner', 'hora')">HORA</th>
+                                <th onclick="ordenarTabla('toner', 'tipo')">IMPRESORA / TONER</th>
+                                <th onclick="ordenarTabla('toner', 'retira')">QUIÉN RETIRA</th>
+                                <th onclick="ordenarTabla('toner', 'lugar')">LUGAR DE DESTINO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaToner"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PANTALLA ETIQUETA QR -->
 <section id="pantallaQR" class="pantalla">
     <div class="contenido">
         <div class="card qr-contenedor">
-            <h2>🔲 Generar etiqueta QR</h2>
+            <h2>🏷️ Generar etiqueta QR</h2>
             <div class="qr-form">
                 <input type="text" id="inputQR" placeholder="Código de Netbook, por ejemplo NB-001">
-                <button class="btn btn-generar" onclick="generarQR()">🔲 GENERAR QR</button>
+                <button class="btn btn-generar" onclick="generarQR()">🏷️ GENERAR ETIQUETA</button>
             </div>
 
             <div id="etiqueta" class="etiqueta">
@@ -579,61 +766,299 @@ input[type="text"] {
     </div>
 </section>
 
+<!-- PANTALLA QR TEMPORAL -->
+<section id="pantallaQRTemporal" class="pantalla">
+    <div class="bg-slate-950 text-slate-100 min-h-[calc(100vh-140px)] flex flex-col justify-center p-4 sm:p-6 lg:p-8 rounded-xl shadow-xl">
+        <div class="max-w-7xl w-full mx-auto">
+            
+            <div class="no-print flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 pb-4 border-b border-slate-800">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-brand-600/20 text-brand-400 rounded-xl border border-brand-500/30">
+                        <i data-lucide="qr-code" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold tracking-tight text-white flex items-center gap-2 m-0 p-0 border-none">
+                            Generador QR por Horarios Recurrentes
+                        </h2>
+                        <p class="text-xs text-brand-300 font-medium m-0">
+                            Desarrollado por Ricardo Iermito - TIC C.E.T Nº 3
+                        </p>
+                    </div>
+                </div>
+
+                <div id="mode-selector-bar" class="flex items-center gap-1.5 bg-slate-900 p-1.5 rounded-xl border border-slate-800">
+                    <button id="nav-mode-gen" onclick="switchView('generator')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 bg-brand-600 text-white shadow-lg shadow-brand-600/30 flex items-center gap-2">
+                        <i data-lucide="wand-2" class="w-3.5 h-3.5"></i> Panel Generador
+                    </button>
+                    <button id="nav-mode-val" onclick="switchView('validator')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all duration-200 flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Probar Validador
+                    </button>
+                </div>
+            </div>
+
+            <!-- Vista Generador -->
+            <div id="view-generator" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-6">
+                    <form id="qr-form" onsubmit="handleFormSubmitTemp(event)" class="space-y-6">
+                        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                            <h3 class="text-base font-semibold text-white flex items-center gap-2 border-b border-slate-800 pb-3 m-0">
+                                <i data-lucide="globe" class="w-4 h-4 text-brand-400"></i>
+                                1. Enlace de Destino
+                            </h3>
+                            <div>
+                                <label for="target-content" class="block text-xs font-medium text-slate-300 mb-1.5">URL de Destino Final (Página Web Real)</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                        <i data-lucide="link" class="w-4 h-4"></i>
+                                    </div>
+                                    <input type="text" id="target-content" required value="google.com" placeholder="https://mi-menu-o-sitio.com" 
+                                        class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-white placeholder-slate-500 text-xs transition-all">
+                                </div>
+                                <p class="mt-1.5 text-[11px] text-slate-400">Página a la que se enviará al usuario cuando escanee el código en un horario autorizado.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+                            <h3 class="text-base font-semibold text-white flex items-center gap-2 border-b border-slate-800 pb-3 m-0">
+                                <i data-lucide="calendar-clock" class="w-4 h-4 text-brand-400"></i>
+                                2. Días y Rangos de Horario Permitidos
+                            </h3>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-2.5">Días Permitidos de Acceso</label>
+                                <div class="flex flex-wrap gap-2" id="days-selector">
+                                    <button type="button" data-day="1" onclick="toggleDay(this)" class="day-btn px-3 py-2 rounded-xl text-xs font-semibold bg-brand-600 text-white transition shadow-md">Lun</button>
+                                    <button type="button" data-day="2" onclick="toggleDay(this)" class="day-btn px-3 py-2 rounded-xl text-xs font-semibold bg-brand-600 text-white transition shadow-md">Mar</button>
+                                    <button type="button" data-day="3" onclick="toggleDay(this)" class="day-btn px-3 py-2 rounded-xl text-xs font-semibold bg-brand-600 text-white transition shadow-md">Mié</button>
+                                    <button type="button" data-day="4" onclick="toggleDay(this)" class="day-btn px-3 py-2 rounded-xl text-xs font-semibold bg-brand-600 text-white transition shadow-md">Jue</button>
+                                    <button type="button" data-day="5" onclick="toggleDay(this)" class="day-btn px-3 py-2 rounded-xl text-xs font-semibold bg-brand-600 text-white transition shadow-md">Vie</button>
+                                    <button type="button" data-day="6" onclick="toggleDay(this)" class="day-btn px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700 transition">Sáb</button>
+                                    <button type="button" data-day="0" onclick="toggleDay(this)" class="day-btn px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700 transition">Dom</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-xs font-medium text-slate-300">Intervalos / Rangos Horarios</label>
+                                    <button type="button" onclick="addTimeInterval()" class="text-xs text-brand-400 hover:text-brand-300 font-semibold flex items-center gap-1 transition">
+                                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Agregar Intervalo
+                                    </button>
+                                </div>
+                                <div id="intervals-container" class="space-y-3">
+                                    <!-- Dinámico -->
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="poster-title" class="block text-xs font-medium text-slate-300 mb-1">Título del Cartel Imprimible</label>
+                                <input type="text" id="poster-title" value="Escanea para Acceder" placeholder="Ej: Menú de Almuerzo / Acceso C.E.T Nº 3" 
+                                    class="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 px-6 bg-brand-600 hover:bg-brand-500 text-white rounded-2xl font-bold text-sm shadow-xl shadow-brand-600/30 transition flex items-center justify-center gap-2 transform active:scale-[0.99]">
+                            <i data-lucide="qr-code" class="w-5 h-5"></i> Generar Código QR
+                        </button>
+                    </form>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div id="printable-poster" class="bg-white text-slate-900 rounded-2xl p-6 shadow-2xl border border-slate-200 flex flex-col items-center text-center relative">
+                        <div class="no-print absolute top-3 right-3 bg-brand-50 text-brand-700 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            Vista Previa
+                        </div>
+                        <h3 id="display-poster-title" class="text-xl font-bold text-slate-900 mt-2 mb-1 p-0 border-none text-center">Escanea para Acceder</h3>
+                        <p class="text-xs text-slate-500 max-w-xs mb-4">Apunta con la cámara de tu teléfono para ingresar en el horario permitido.</p>
+
+                        <div class="bg-white p-5 rounded-2xl border-2 border-slate-300 shadow-sm mb-4 flex items-center justify-center">
+                            <div id="qrcode-canvas" class="bg-white p-2"></div>
+                        </div>
+
+                        <div class="w-full bg-slate-100 p-3 rounded-xl text-center space-y-1 border border-slate-200 mb-3">
+                            <div class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Horarios de Funcionamiento</div>
+                            <div id="display-poster-days" class="text-xs font-bold text-brand-700">Lun, Mar, Mié, Jue, Vie</div>
+                            <div id="display-poster-hours" class="text-xs font-semibold text-slate-800 space-y-0.5"></div>
+                        </div>
+
+                        <div class="w-full pt-3 border-t border-slate-200 text-[10px] font-semibold text-slate-500 tracking-tight">
+                            Desarrollado por Ricardo Iermito - TIC C.E.T Nº 3
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 no-print">
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="window.print()" class="py-3 px-4 bg-brand-600 hover:bg-brand-500 text-white rounded-xl font-semibold shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-2 text-xs">
+                                <i data-lucide="printer" class="w-4 h-4"></i> Imprimir Cartel
+                            </button>
+                            <button onclick="downloadQRImage()" class="py-3 px-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-xl font-semibold transition flex items-center justify-center gap-2 text-xs">
+                                <i data-lucide="download" class="w-4 h-4"></i> Descargar Imagen QR
+                            </button>
+                        </div>
+                        <button onclick="simulateScan()" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold shadow-lg shadow-emerald-900/30 transition flex items-center justify-center gap-2 text-xs">
+                            <i data-lucide="smartphone" class="w-4 h-4"></i> Simular Escaneo Móvil
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista Validador -->
+            <div id="view-validator" class="max-w-md mx-auto w-full my-auto space-y-6 hidden">
+                <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+                        <div class="flex items-center gap-2 text-xs text-slate-400">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-brand-400"></i>
+                            <span>Evaluación de Acceso Temporal</span>
+                        </div>
+                        <div id="live-clock" class="text-xs font-mono font-bold bg-slate-950 border border-slate-800 text-brand-400 px-3 py-1 rounded-full">
+                            --:--:--
+                        </div>
+                    </div>
+
+                    <div id="validation-screen" class="space-y-6">
+                        <div class="text-center py-10">
+                            <div class="inline-block animate-spin text-brand-500 mb-3">
+                                <i data-lucide="loader-2" class="w-8 h-8"></i>
+                            </div>
+                            <p class="text-xs text-slate-400">Verificando regla de horario...</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t border-slate-800/80 text-center">
+                        <p class="text-[11px] text-slate-500 font-medium">
+                            Desarrollado por Ricardo Iermito - TIC C.E.T Nº 3
+                        </p>
+                    </div>
+                </div>
+
+                <div id="back-to-gen-btn" class="text-center no-print">
+                    <button onclick="switchView('generator')" class="text-xs text-slate-400 hover:text-slate-200 transition underline">
+                        &larr; Volver al Panel Generador
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- PANTALLA FUNCIONAMIENTO -->
 <section id="pantallaFuncionamiento" class="pantalla">
     <div class="contenido">
         <div class="card funcionamiento">
-            <h2>ℹ️ Funcionamiento del sistema</h2>
+            <h2>ℹ️ Funcionamiento del Sistema Integral</h2>
             <div class="funcion-grid">
                 <div class="funcion">
-                    <h3>📤 Entrega</h3>
-                    <p>Seleccioná <strong>ENTREGA</strong>. Ingresá estudiante, profesor y curso, y luego escaneá las netbooks.</p>
+                    <h3>💻 Control de Netbooks</h3>
+                    <p>Permite registrar entregas (con datos de estudiante, profesor y curso completo) y recepciones mediante lectura de código QR con cámara o ingreso manual. Las tablas cuentan con filtros de estado y ordenamiento interactivo haciendo clic en las cabeceras.</p>
                 </div>
                 <div class="funcion">
-                    <h3>📥 Recepción</h3>
-                    <p>Seleccioná <strong>RECEPCIÓN</strong>. Escaneá o escribí el código para registrar la devolución.</p>
+                    <h3>📄 Control de Resmas de Hojas</h3>
+                    <p>Módulo dedicado al registro de salidas de resmas. Especifica obligatoriamente el tipo/tamaño de resma, quién retira, lugar de destino o uso, fecha y hora. Historial local independiente con buscador y exportación a CSV.</p>
                 </div>
                 <div class="funcion">
-                    <h3>🔄 Respaldos Automáticos</h3>
-                    <p>Todos los registros se guardan automáticamente en la nube. Si borrás el historial local, podés usar el botón <strong>RESTAURAR DE LA NUBE</strong> para recuperarlos.</p>
+                    <h3>🖨️ Control de Toner</h3>
+                    <p>Gestión y seguimiento de entrega de toners e insumos de impresión. Permite registrar el modelo de impresora/toner, el responsable que retira, el lugar de destino, fecha y hora con opción de descarga de historial.</p>
                 </div>
                 <div class="funcion">
-                    <h3>🎨 Estados</h3>
-                    <p><strong style="color:#c62828">🔴 ENTREGADA</strong> y <strong style="color:#1565c0">🔵 RECIBIDA</strong>.</p>
+                    <h3>🏷️ Etiqueta QR</h3>
+                    <p>Generador rápido de etiquetas de identificación individual para netbooks del C.E.T. Nº 3. Permite ingresar el código, visualizar la etiqueta institucional y enviarla directamente a imprimir en formato físico.</p>
+                </div>
+                <div class="funcion">
+                    <h3>⏱️ QR Temporal por Horarios</h3>
+                    <p>Crea códigos QR avanzados vinculados a URL de destino con reglas personalizadas de días de la semana y múltiples intervalos de horarios permitidos. Incluye previsualización de cartel imprimible, descarga de imagen y simulador de validación móvil.</p>
+                </div>
+                <div class="funcion">
+                    <h3>💾 Almacenamiento Local (Localhost)</h3>
+                    <p>Todo el sistema opera 100% de forma local en el navegador mediante <code>localStorage</code>, eliminando dependencias de nubes externas. Cada sección de insumos y netbooks incluye respaldos independientes descargables en formato CSV.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<script>
-// PEGA AQUÍ TU URL DE GOOGLE APPS SCRIPT
-const URL_SCRIPT = "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI";
+<!-- Toast de Notificación -->
+<div id="toast" class="no-print fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-700 text-slate-200 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 pointer-events-none">
+    <i id="toast-icon" data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+    <span id="toast-msg" class="text-xs font-medium">Notificación</span>
+</div>
 
+<script>
 let scanner = null;
 let lista = [];
 let filtro = "todas";
+
+// Estado de ordenamiento
+let ordenTablas = {
+    netbooks: { col: 'fechaHora', asc: false },
+    resmas: { col: 'fecha', asc: false },
+    toner: { col: 'fecha', asc: false }
+};
+
+// Variables Generador QR Temporal Optimizado
+const BASE_HOSTING_URL = "https://referentesticscet3roca-sys.github.io/Generador-QR-Temporal/";
+let qrInstanceTemp = null;
+let generatedQrUrl = "";
+const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+const dayNamesFull = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
 function actualizarReloj() {
     const ahora = new Date();
     const fecha = ahora.toLocaleDateString("es-AR", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
     const hora = ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     document.getElementById("reloj").innerText = "📅 " + fecha + "   🕐 " + hora;
+
+    const clockEl = document.getElementById('live-clock');
+    if (clockEl) {
+        clockEl.innerText = ahora.toLocaleTimeString('es-ES', { hour12: false });
+    }
 }
 setInterval(actualizarReloj, 1000);
 actualizarReloj();
+
+function establecerFechasHorasActuales() {
+    const ahora = new Date();
+    const fechaISO = ahora.toISOString().split('T')[0];
+    const horaISO = ahora.toTimeString().split(' ')[0].substring(0, 5);
+
+    document.getElementById("resmaFecha").value = fechaISO;
+    document.getElementById("resmaHora").value = horaISO;
+    document.getElementById("tonerFecha").value = fechaISO;
+    document.getElementById("tonerHora").value = horaISO;
+}
 
 function mostrarPantalla(nombre) {
     document.querySelectorAll(".pantalla").forEach(p => p.classList.remove("activa"));
     document.querySelectorAll(".menu button").forEach(b => b.classList.remove("activo"));
 
-    if(nombre === "registro") {
-        document.getElementById("pantallaRegistro").classList.add("activa");
-        document.getElementById("menuRegistro").classList.add("activo");
+    if(nombre === "netbooks") {
+        document.getElementById("pantallaNetbooks").classList.add("activa");
+        document.getElementById("menuNetbooks").classList.add("activo");
+    }
+    if(nombre === "resmas") {
+        document.getElementById("pantallaResmas").classList.add("activa");
+        document.getElementById("menuResmas").classList.add("activo");
+        detenerCamara();
+    }
+    if(nombre === "toner") {
+        document.getElementById("pantallaToner").classList.add("activa");
+        document.getElementById("menuToner").classList.add("activo");
+        detenerCamara();
     }
     if(nombre === "qr") {
         document.getElementById("pantallaQR").classList.add("activa");
         document.getElementById("menuQR").classList.add("activo");
         detenerCamara();
+    }
+    if(nombre === "qrTemporal") {
+        document.getElementById("pantallaQRTemporal").classList.add("activa");
+        document.getElementById("menuQRTemporal").classList.add("activo");
+        detenerCamara();
+        lucide.createIcons();
+        if(document.getElementById('intervals-container').children.length === 0) {
+            addTimeInterval("13:00", "13:30");
+            addTimeInterval("15:00", "15:33");
+            addTimeInterval("18:00", "22:32");
+        }
+        generateQRTemp();
     }
     if(nombre === "funcionamiento") {
         document.getElementById("pantallaFuncionamiento").classList.add("activa");
@@ -642,7 +1067,33 @@ function mostrarPantalla(nombre) {
     }
 }
 
-function obtenerRegistros() {
+// --- ORDENAMIENTO DE TABLAS ---
+function ordenarTabla(seccion, columna) {
+    if (ordenTablas[seccion].col === columna) {
+        ordenTablas[seccion].asc = !ordenTablas[seccion].asc;
+    } else {
+        ordenTablas[seccion].col = columna;
+        ordenTablas[seccion].asc = true;
+    }
+
+    if (seccion === 'netbooks') cargarTablaNetbooks();
+    if (seccion === 'resmas') cargarTablaResmas();
+    if (seccion === 'toner') cargarTablaToner();
+}
+
+function aplicarOrden(datos, columna, asc) {
+    return datos.sort((a, b) => {
+        let valA = (a[columna] || '').toString().toLowerCase();
+        let valB = (b[columna] || '').toString().toLowerCase();
+
+        if (valA < valB) return asc ? -1 : 1;
+        if (valA > valB) return asc ? 1 : -1;
+        return 0;
+    });
+}
+
+// --- SECCIÓN NETBOOKS ---
+function obtenerRegistrosNetbooks() {
     return JSON.parse(localStorage.getItem("db_netbooks")) || [];
 }
 
@@ -667,7 +1118,7 @@ function actualizarCurso() {
 }
 
 function buscarNetbook(codigo) {
-    const registros = obtenerRegistros();
+    const registros = obtenerRegistrosNetbooks();
     for(let i = registros.length - 1; i >= 0; i--) {
         if(String(registros[i].numNetbook).toUpperCase() === codigo.toUpperCase()) {
             return { registro: registros[i], indice: i };
@@ -775,8 +1226,7 @@ document.getElementById("registroForm").addEventListener("submit", function(e) {
     const ahora = new Date();
     const fechaHora = ahora.toLocaleDateString("es-AR") + " " + ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
     const movimiento = document.querySelector('input[name="movimiento"]:checked').value;
-    let registros = obtenerRegistros();
-    let nuevosRegistros = [];
+    let registros = obtenerRegistrosNetbooks();
 
     if(movimiento === "Entrada (Recepción)") {
         lista.forEach(codigo => {
@@ -785,7 +1235,6 @@ document.getElementById("registroForm").addEventListener("submit", function(e) {
                 registros[encontrado.indice].estado = "RECIBIDA";
                 registros[encontrado.indice].movimiento = "Entrada (Recepción)";
                 registros[encontrado.indice].fechaHora = fechaHora;
-                nuevosRegistros.push(registros[encontrado.indice]);
             }
         });
     } else {
@@ -797,7 +1246,7 @@ document.getElementById("registroForm").addEventListener("submit", function(e) {
         const curso = ciclo + " · " + grado + "° · " + division + "° División";
 
         lista.forEach(codigo => {
-            const reg = {
+            registros.push({
                 fechaHora: fechaHora,
                 numNetbook: codigo,
                 movimiento: "Salida (Entrega)",
@@ -805,16 +1254,11 @@ document.getElementById("registroForm").addEventListener("submit", function(e) {
                 profesor: profesor,
                 curso: curso,
                 estado: "ENTREGADA"
-            };
-            registros.push(reg);
-            nuevosRegistros.push(reg);
+            });
         });
     }
 
     localStorage.setItem("db_netbooks", JSON.stringify(registros));
-    
-    // GUARDADO AUTOMÁTICO EN LA NUBE (GOOGLE SHEETS)
-    guardarEnNube(nuevosRegistros);
 
     lista = [];
     actualizarLista();
@@ -823,47 +1267,15 @@ document.getElementById("registroForm").addEventListener("submit", function(e) {
 
     cambiarMovimiento();
     actualizarCurso();
-    cargarTabla();
+    cargarTablaNetbooks();
     detenerCamara();
 
     alert("✓ Operación registrada correctamente.");
 });
 
-function guardarEnNube(registrosNuevos) {
-    if(!URL_SCRIPT || URL_SCRIPT === "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI") return;
-    fetch(URL_SCRIPT, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "guardar", registros: registrosNuevos })
-    }).catch(err => console.error("Error respaldando en la nube:", err));
-}
-
-function sincronizarConNube() {
-    if(!URL_SCRIPT || URL_SCRIPT === "https://script.google.com/macros/s/AKfycbzelhn5zTgtH-rGgfKZdN03Bs2hCNJ1f99A-IC3pgfow8iLUNFH7NK9oazLOoKgZIRj/exec") {
-        alert("Configurá la URL de Apps Script primero.");
-        return;
-    }
-    
-    mostrarMensaje("🔄 Sincronizando datos...", false);
-    fetch(URL_SCRIPT)
-        .then(res => res.json())
-        .then(data => {
-            if(Array.isArray(data)) {
-                localStorage.setItem("db_netbooks", JSON.stringify(data));
-                cargarTabla();
-                alert("✓ Registros recuperados con éxito desde la nube.");
-            }
-        })
-        .catch(err => {
-            console.error("Error al recuperar datos:", err);
-            alert("Error al intentar recuperar los datos de la nube.");
-        });
-}
-
-function cargarTabla() {
-    const registros = obtenerRegistros();
-    const busqueda = document.getElementById("buscar").value.toLowerCase();
+function cargarTablaNetbooks() {
+    let registros = obtenerRegistrosNetbooks();
+    const busqueda = document.getElementById("buscarNetbookInput").value.toLowerCase();
     const tabla = document.getElementById("tablaRegistros");
     tabla.innerHTML = "";
 
@@ -879,13 +1291,17 @@ function cargarTabla() {
     document.getElementById("totalEntregadas").innerText = entregadas;
     document.getElementById("totalRecibidas").innerText = recibidas;
 
-    registros.slice().reverse().forEach(r => {
-        if(filtro === "entregadas" && r.estado !== "ENTREGADA") return;
-        if(filtro === "recibidas" && r.estado !== "RECIBIDA") return;
+    let filtrados = registros.filter(r => {
+        if (filtro === "entregadas" && r.estado !== "ENTREGADA") return false;
+        if (filtro === "recibidas" && r.estado !== "RECIBIDA") return false;
 
         const texto = (r.numNetbook + " " + (r.estudiante || "") + " " + (r.profesor || "") + " " + (r.curso || "")).toLowerCase();
-        if(busqueda && !texto.includes(busqueda)) return;
+        return !busqueda || texto.includes(busqueda);
+    });
 
+    filtrados = aplicarOrden(filtrados, ordenTablas.netbooks.col, ordenTablas.netbooks.asc);
+
+    filtrados.forEach(r => {
         const recibida = r.estado === "RECIBIDA";
         const fila = document.createElement("tr");
 
@@ -912,7 +1328,7 @@ function cambiarEstado(codigo) {
     const nuevo = encontrado.registro.estado === "ENTREGADA" ? "RECIBIDA" : "ENTREGADA";
     if(!confirm("¿Cambiar " + codigo + " a " + nuevo + "?")) return;
 
-    let registros = obtenerRegistros();
+    let registros = obtenerRegistrosNetbooks();
     registros[encontrado.indice].estado = nuevo;
     registros[encontrado.indice].movimiento = nuevo === "RECIBIDA" ? "Entrada (Recepción)" : "Salida (Entrega)";
 
@@ -920,8 +1336,7 @@ function cambiarEstado(codigo) {
     registros[encontrado.indice].fechaHora = ahora.toLocaleDateString("es-AR") + " " + ahora.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
 
     localStorage.setItem("db_netbooks", JSON.stringify(registros));
-    guardarEnNube([registros[encontrado.indice]]);
-    cargarTabla();
+    cargarTablaNetbooks();
 }
 
 function cambiarFiltro(nuevo) {
@@ -930,9 +1345,444 @@ function cambiarFiltro(nuevo) {
     if(nuevo === "todas") document.getElementById("filtroTodas").classList.add("activo");
     if(nuevo === "entregadas") document.getElementById("filtroEntregadas").classList.add("activo");
     if(nuevo === "recibidas") document.getElementById("filtroRecibidas").classList.add("activo");
-    cargarTabla();
+    cargarTablaNetbooks();
 }
 
+function exportarCSVNetbooks() {
+    const registros = obtenerRegistrosNetbooks();
+    if(registros.length === 0) { alert("No hay registros de netbooks."); return; }
+
+    let csv = "\uFEFFFecha y Hora;N° Netbook;Estado;Estudiante;Profesor;Curso/División\n";
+    registros.forEach(r => {
+        csv += `"${csvEscape(r.fechaHora)}";"${csvEscape(r.numNetbook)}";"${csvEscape(r.estado)}";"${csvEscape(r.estudiante || "")}";"${csvEscape(r.profesor || "")}";"${csvEscape(r.curso || "")}"\n`;
+    });
+
+    descargarArchivoCSV(csv, "Control_Netbooks_CET3_");
+}
+
+function borrarDatosNetbooks() {
+    if(confirm("⚠️ ¿Seguro que querés borrar el historial local de Netbooks?")) {
+        localStorage.removeItem("db_netbooks");
+        cargarTablaNetbooks();
+    }
+}
+
+
+// --- SECCIÓN RESMAS ---
+function obtenerRegistrosResmas() {
+    return JSON.parse(localStorage.getItem("db_resmas")) || [];
+}
+
+function guardarResma(e) {
+    e.preventDefault();
+    const tipo = document.getElementById("resmaTipo").value.trim();
+    const retira = document.getElementById("resmaRetira").value.trim();
+    const lugar = document.getElementById("resmaLugar").value.trim();
+    const fecha = document.getElementById("resmaFecha").value;
+    const hora = document.getElementById("resmaHora").value;
+
+    let resmas = obtenerRegistrosResmas();
+    resmas.push({ tipo, retira, lugar, fecha, hora });
+    localStorage.setItem("db_resmas", JSON.stringify(resmas));
+
+    document.getElementById("formResmas").reset();
+    establecerFechasHorasActuales();
+    cargarTablaResmas();
+    alert("✓ Registro de resma guardado correctamente.");
+}
+
+function cargarTablaResmas() {
+    let registros = obtenerRegistrosResmas();
+    const busqueda = document.getElementById("buscarResmaInput").value.toLowerCase();
+    const tabla = document.getElementById("tablaResmas");
+    tabla.innerHTML = "";
+
+    let filtrados = registros.filter(r => {
+        const texto = (r.tipo + " " + r.retira + " " + r.lugar + " " + r.fecha).toLowerCase();
+        return !busqueda || texto.includes(busqueda);
+    });
+
+    filtrados = aplicarOrden(filtrados, ordenTablas.resmas.col, ordenTablas.resmas.asc);
+
+    filtrados.forEach(r => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+            <td>${escapeHTML(r.fecha)}</td>
+            <td>${escapeHTML(r.hora)}</td>
+            <td><strong>${escapeHTML(r.tipo)}</strong></td>
+            <td>${escapeHTML(r.retira)}</td>
+            <td>${escapeHTML(r.lugar)}</td>
+        `;
+        tabla.appendChild(fila);
+    });
+}
+
+function exportarCSVResmas() {
+    const registros = obtenerRegistrosResmas();
+    if(registros.length === 0) { alert("No hay registros de resmas."); return; }
+
+    let csv = "\uFEFFFecha;Hora;Tipo de Resma;Quién Retira;Lugar de Destino / Uso\n";
+    registros.forEach(r => {
+        csv += `"${csvEscape(r.fecha)}";"${csvEscape(r.hora)}";"${csvEscape(r.tipo)}";"${csvEscape(r.retira)}";"${csvEscape(r.lugar)}"\n`;
+    });
+
+    descargarArchivoCSV(csv, "Control_Resmas_CET3_");
+}
+
+function borrarDatosResmas() {
+    if(confirm("⚠️ ¿Seguro que querés borrar el historial local de Resmas?")) {
+        localStorage.removeItem("db_resmas");
+        cargarTablaResmas();
+    }
+}
+
+
+// --- SECCIÓN TONER ---
+function obtenerRegistrosToner() {
+    return JSON.parse(localStorage.getItem("db_toner")) || [];
+}
+
+function guardarToner(e) {
+    e.preventDefault();
+    const tipo = document.getElementById("tonerTipo").value.trim();
+    const retira = document.getElementById("tonerRetira").value.trim();
+    const lugar = document.getElementById("tonerLugar").value.trim();
+    const fecha = document.getElementById("tonerFecha").value;
+    const hora = document.getElementById("tonerHora").value;
+
+    let toners = obtenerRegistrosToner();
+    toners.push({ tipo, retira, lugar, fecha, hora });
+    localStorage.setItem("db_toner", JSON.stringify(toners));
+
+    document.getElementById("formToner").reset();
+    establecerFechasHorasActuales();
+    cargarTablaToner();
+    alert("✓ Registro de toner guardado correctamente.");
+}
+
+function cargarTablaToner() {
+    let registros = obtenerRegistrosToner();
+    const busqueda = document.getElementById("buscarTonerInput").value.toLowerCase();
+    const tabla = document.getElementById("tablaToner");
+    tabla.innerHTML = "";
+
+    let filtrados = registros.filter(r => {
+        const texto = (r.tipo + " " + r.retira + " " + r.lugar + " " + r.fecha).toLowerCase();
+        return !busqueda || texto.includes(busqueda);
+    });
+
+    filtrados = aplicarOrden(filtrados, ordenTablas.toner.col, ordenTablas.toner.asc);
+
+    filtrados.forEach(r => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+            <td>${escapeHTML(r.fecha)}</td>
+            <td>${escapeHTML(r.hora)}</td>
+            <td><strong>${escapeHTML(r.tipo)}</strong></td>
+            <td>${escapeHTML(r.retira)}</td>
+            <td>${escapeHTML(r.lugar)}</td>
+        `;
+        tabla.appendChild(fila);
+    });
+}
+
+function exportarCSVToner() {
+    const registros = obtenerRegistrosToner();
+    if(registros.length === 0) { alert("No hay registros de toners."); return; }
+
+    let csv = "\uFEFFFecha;Hora;Tipo de Impresora / Toner;Quién Retira;Lugar de Destino\n";
+    registros.forEach(r => {
+        csv += `"${csvEscape(r.fecha)}";"${csvEscape(r.hora)}";"${csvEscape(r.tipo)}";"${csvEscape(r.retira)}";"${csvEscape(r.lugar)}"\n`;
+    });
+
+    descargarArchivoCSV(csv, "Control_Toner_CET3_");
+}
+
+function borrarDatosToner() {
+    if(confirm("⚠️ ¿Seguro que querés borrar el historial local de Toner?")) {
+        localStorage.removeItem("db_toner");
+        cargarTablaToner();
+    }
+}
+
+
+// --- SECCIÓN QR TEMPORAL ---
+function switchView(view) {
+    const viewGen = document.getElementById('view-generator');
+    const viewVal = document.getElementById('view-validator');
+    const btnGen = document.getElementById('nav-mode-gen');
+    const btnVal = document.getElementById('nav-mode-val');
+
+    if (view === 'generator') {
+        viewGen.classList.remove('hidden');
+        viewVal.classList.add('hidden');
+
+        btnGen.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 bg-brand-600 text-white shadow-lg shadow-brand-600/30 flex items-center gap-2";
+        btnVal.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all duration-200 flex items-center gap-2";
+    } else {
+        viewGen.classList.add('hidden');
+        viewVal.classList.remove('hidden');
+
+        btnVal.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 bg-brand-600 text-white shadow-lg shadow-brand-600/30 flex items-center gap-2";
+        btnGen.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all duration-200 flex items-center gap-2";
+    }
+}
+
+function toggleDay(btn) {
+    if (btn.classList.contains('bg-brand-600')) {
+        btn.classList.remove('bg-brand-600', 'text-white', 'shadow-md');
+        btn.classList.add('bg-slate-800', 'text-slate-400', 'border', 'border-slate-700');
+    } else {
+        btn.classList.add('bg-brand-600', 'text-white', 'shadow-md');
+        btn.classList.remove('bg-slate-800', 'text-slate-400', 'border', 'border-slate-700');
+    }
+}
+
+function addTimeInterval(startVal = "08:00", endVal = "12:00") {
+    const container = document.getElementById('intervals-container');
+    const div = document.createElement('div');
+    div.className = "interval-row grid grid-cols-12 gap-2 items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800";
+    div.innerHTML = `
+        <div class="col-span-5">
+            <input type="time" value="${startVal}" required class="sched-start w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+        </div>
+        <div class="col-span-1 text-center text-xs text-slate-500">a</div>
+        <div class="col-span-5">
+            <input type="time" value="${endVal}" required class="sched-end w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white focus:ring-2 focus:ring-brand-500 focus:outline-none">
+        </div>
+        <div class="col-span-1 text-right">
+            <button type="button" onclick="removeInterval(this)" class="text-slate-500 hover:text-red-400 p-1 transition">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+        </div>
+    `;
+    container.appendChild(div);
+    lucide.createIcons();
+}
+
+function removeInterval(btn) {
+    const container = document.getElementById('intervals-container');
+    if (container.children.length > 1) {
+        btn.closest('.interval-row').remove();
+    } else {
+        showToast("Debe existir al menos un intervalo de horario");
+    }
+}
+
+function formatValidUrl(raw) {
+    let url = raw.trim();
+    if (!url) return "https://google.com";
+    if (!/^https?:\/\//i.test(url)) {
+        url = 'https://' + url;
+    }
+    return url;
+}
+
+function handleFormSubmitTemp(e) {
+    e.preventDefault();
+    generateQRTemp();
+    showToast("¡Código QR optimizado generado!");
+}
+
+function generateQRTemp() {
+    const targetUrl = formatValidUrl(document.getElementById('target-content').value);
+
+    const days = [];
+    const selectedDaysText = [];
+    document.querySelectorAll('#days-selector .day-btn').forEach(btn => {
+        if (btn.classList.contains('bg-brand-600')) {
+            const dayNum = parseInt(btn.getAttribute('data-day'));
+            days.push(dayNum);
+            selectedDaysText.push(dayNames[dayNum]);
+        }
+    });
+
+    const intervals = [];
+    const hoursDisplayHTML = [];
+    document.querySelectorAll('.interval-row').forEach(row => {
+        const s = row.querySelector('.sched-start').value;
+        const e = row.querySelector('.sched-end').value;
+        if (s && e) {
+            intervals.push([s, e]);
+            hoursDisplayHTML.push(`<div>De ${s} hs a ${e} hs</div>`);
+        }
+    });
+
+    const payload = {
+        u: targetUrl,
+        d: days,
+        i: intervals
+    };
+
+    const encodedData = btoa(encodeURIComponent(JSON.stringify(payload)));
+    
+    let cleanBaseUrl = BASE_HOSTING_URL.endsWith('/') ? BASE_HOSTING_URL : BASE_HOSTING_URL + '/';
+    const finalQrContent = `${cleanBaseUrl}?qrdata=${encodedData}`;
+    generatedQrUrl = finalQrContent;
+
+    const container = document.getElementById('qrcode-canvas');
+    if (!container) return;
+    container.innerHTML = "";
+
+    qrInstanceTemp = new QRCode(container, {
+        text: finalQrContent,
+        width: 300,
+        height: 300,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+    });
+
+    document.getElementById('display-poster-title').innerText = document.getElementById('poster-title').value.trim() || "Escanea para Acceder";
+    document.getElementById('display-poster-days').innerText = selectedDaysText.length > 0 ? selectedDaysText.join(', ') : "Ningún día seleccionado";
+    document.getElementById('display-poster-hours').innerHTML = hoursDisplayHTML.length > 0 ? hoursDisplayHTML.join('') : "Sin horarios definidos";
+}
+
+function simulateScan() {
+    const urlParams = new URLSearchParams(generatedQrUrl.split('?')[1]);
+    const qrDataParam = urlParams.get('qrdata');
+    switchView('validator');
+    processAccess(qrDataParam);
+}
+
+function processAccess(encodedData) {
+    const screen = document.getElementById('validation-screen');
+
+    try {
+        const jsonString = decodeURIComponent(atob(encodedData));
+        const payload = JSON.parse(jsonString);
+
+        const targetUrl = payload.u || payload.url;
+        const allowedDays = payload.d || payload.days || [];
+        const allowedIntervals = payload.i || payload.intervals || [];
+
+        const now = new Date();
+        const currentDay = now.getDay();
+        const currentHours = String(now.getHours()).padStart(2, '0');
+        const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+        const currentTime = `${currentHours}:${currentMinutes}`;
+
+        const dayMatch = allowedDays.includes(currentDay);
+        
+        let timeMatch = false;
+        if (allowedIntervals && allowedIntervals.length > 0) {
+            timeMatch = allowedIntervals.some(interval => {
+                const start = Array.isArray(interval) ? interval[0] : interval.start;
+                const end = Array.isArray(interval) ? interval[1] : interval.end;
+                return currentTime >= start && currentTime <= end;
+            });
+        }
+
+        const isAllowed = dayMatch && timeMatch;
+
+        if (isAllowed) {
+            screen.innerHTML = `
+                <div class="text-center space-y-4 py-4">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/40">
+                        <i data-lucide="check-circle" class="w-10 h-10"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-emerald-400">Horario Permitido</span>
+                        <h2 class="text-2xl font-black text-white mt-1 border-none p-0">ACCESO AUTORIZADO</h2>
+                        <p class="text-xs text-slate-300 mt-1">Redirigiendo al enlace en 2 segundos...</p>
+                    </div>
+                    <a href="${targetUrl}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-lg transition">
+                        Abrir Enlace Manualmente <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>`;
+            lucide.createIcons();
+
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 2000);
+
+        } else {
+            let subtext = "";
+            if (!dayMatch) {
+                subtext = `Hoy (${dayNamesFull[currentDay]}) el acceso no se encuentra habilitado.`;
+            } else {
+                subtext = `La hora actual (${currentTime} hs) está fuera de los rangos autorizados.`;
+            }
+
+            const intervalsFormatted = allowedIntervals.map(i => {
+                const s = Array.isArray(i) ? i[0] : i.start;
+                const e = Array.isArray(i) ? i[1] : i.end;
+                return `${s} a ${e} hs`;
+            }).join('<br>');
+
+            screen.innerHTML = `
+                <div class="text-center space-y-4 py-4">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-red-500/20 text-red-400 rounded-full border border-red-500/40">
+                        <i data-lucide="lock" class="w-10 h-10"></i>
+                    </div>
+
+                    <div>
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-red-400">Acceso Bloqueado</span>
+                        <h2 class="text-xl font-black text-white mt-1 border-none p-0">ACCESO DESHABILITADO / FUERA DE HORARIO</h2>
+                        <p class="text-xs text-red-200/90 mt-2 max-w-xs mx-auto font-medium">${subtext}</p>
+                    </div>
+
+                    <div class="p-4 bg-red-950/40 border border-red-900/50 rounded-2xl text-center space-y-1">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-red-300">Horarios Habilitados</div>
+                        <div class="text-xs text-red-200 font-semibold mb-1">
+                            Días: ${allowedDays.map(d => dayNames[d]).join(', ')}
+                        </div>
+                        <div class="text-xs text-red-200 font-medium">
+                            ${intervalsFormatted}
+                        </div>
+                    </div>
+                </div>`;
+            lucide.createIcons();
+        }
+
+    } catch (e) {
+        screen.innerHTML = `
+            <div class="text-center py-6 text-red-400 space-y-2">
+                <i data-lucide="alert-triangle" class="w-10 h-10 mx-auto"></i>
+                <h3 class="text-sm font-bold border-none p-0">Error de Lectura</h3>
+                <p class="text-xs text-slate-400">No se pudo validar la regla de horario del código QR.</p>
+            </div>`;
+        lucide.createIcons();
+    }
+}
+
+function downloadQRImage() {
+    const container = document.getElementById('qrcode-canvas');
+    const img = container.querySelector('img');
+    const canvas = container.querySelector('canvas');
+
+    let src = img ? img.src : (canvas ? canvas.toDataURL("image/png") : null);
+
+    if (!src) {
+        showToast("Genera un código QR primero");
+        return;
+    }
+
+    const a = document.createElement('a');
+    a.href = src;
+    a.download = 'codigo-qr-temporal.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast("Imagen QR descargada");
+}
+
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-msg');
+
+    toastMsg.innerText = msg;
+    toast.classList.remove('translate-y-20', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+    }, 3000);
+}
+
+
+// UTILS
 function mostrarMensaje(texto, error) {
     const m = document.getElementById("mensaje");
     m.style.display = "block";
@@ -960,34 +1810,19 @@ function imprimirQR() {
     window.print();
 }
 
-function exportarCSV() {
-    const registros = obtenerRegistros();
-    if(registros.length === 0) { alert("No hay registros."); return; }
-
-    let csv = "\uFEFFFecha y Hora;N° Netbook;Estado;Estudiante;Profesor;Curso/División\n";
-    registros.forEach(r => {
-        csv += `"${csvEscape(r.fechaHora)}";"${csvEscape(r.numNetbook)}";"${csvEscape(r.estado)}";"${csvEscape(r.estudiante || "")}";"${csvEscape(r.profesor || "")}";"${csvEscape(r.curso || "")}"\n`;
-    });
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+function descargarArchivoCSV(contenidoCSV, prefijoNombre) {
+    const blob = new Blob([contenidoCSV], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     const fecha = new Date().toLocaleDateString("es-AR").replaceAll("/", "-");
 
     a.href = url;
-    a.download = "Control_Netbooks_CET3_" + fecha + ".csv";
+    a.download = prefijoNombre + fecha + ".csv";
     a.click();
     URL.revokeObjectURL(url);
 }
 
 function csvEscape(text) { return String(text).replaceAll('"', '""'); }
-
-function borrarDatos() {
-    if(confirm("⚠️ ¿Seguro que querés borrar el historial LOCAL de esta computadora? (Los datos seguirán en la nube)")) {
-        localStorage.removeItem("db_netbooks");
-        cargarTabla();
-    }
-}
 
 function escapeHTML(texto) {
     const div = document.createElement("div");
@@ -1000,9 +1835,23 @@ function escapeAtributo(texto) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    cargarTabla();
+    lucide.createIcons();
+    establecerFechasHorasActuales();
+    cargarTablaNetbooks();
+    cargarTablaResmas();
+    cargarTablaToner();
     actualizarCurso();
     cambiarMovimiento();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const qrDataParam = urlParams.get('qrdata');
+
+    if (qrDataParam) {
+        mostrarPantalla('qrTemporal');
+        switchView('validator');
+        document.getElementById('mode-selector-bar').classList.add('hidden');
+        processAccess(qrDataParam);
+    }
 });
 </script>
 
